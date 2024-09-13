@@ -1,4 +1,4 @@
-#  Flags Stabilization 
+##  Flags Stabilization 
 
 Wind Tunnel at Insituto Balseiro 
 
@@ -7,9 +7,7 @@ Wind Tunnel at Insituto Balseiro
 | Flag instability | Stabilized Flag | Unstable Flag |
 |------------------|-----------------|---------------|
 
-
-
- <video width="480" height="320" autoplay loop controls="controls"><source src='./video_flag_stable.mp4' type="video/mp4"></video>
+Can't embed videos! :-(
 
 
 
