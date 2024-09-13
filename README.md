@@ -15,6 +15,11 @@ Wind Tunnel at Insituto Balseiro
 </video>
 
 
+<video width="320" height="240" controls>
+  <source src="figures/video_flag_stable.mov" type="video/mov">
+</video>
+
+
 
 
 
