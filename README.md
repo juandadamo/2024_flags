@@ -6,17 +6,10 @@ Wind Tunnel at Insituto Balseiro
 
 | Flag instability | Stabilized Flag | Unstable Flag |
 |------------------|-----------------|---------------|
-|<video src='https://raw.githubusercontent.com/73a955657b1d4df57eaad878b1fbaf470a1599ef/figures/video_flag_stable.mov' width=90/> |<video src='https://github.com/juandadamo/2024_flags/blob/933682549b5c110ba7b94ed3c7e648f61acaa299/figures/video_flag_stable.mp4' width=90/>|<video src='https://github.com/juandadamo/2024_flags/blob/933682549b5c110ba7b94ed3c7e648f61acaa299/figures/video_flag_unstable2.mp4' width=90/> |
+| <video width="480" height="320" autoplay loop controls="controls"><source src='./figures/video_flag_stable.mp4' type="video/mp4"></video>|
 
 
-<video width="320" height="240" controls>
-  <source src="figures/video_flag_stable.mp4" type="video/mp4">
-</video>
 
-
-<video width="320" height="240" controls>
-  <source src="figures/video_flag_stable.mov" type="video/mov">
-</video>
 
 
 
