@@ -9,6 +9,8 @@ Wind Tunnel at Insituto Balseiro
 
 Can't embed videos! :-(
 
+[Ideas](discusion.md)
+
 
 
 
