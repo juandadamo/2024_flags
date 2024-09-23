@@ -1,9 +1,9 @@
 ##  Flags Stabilization 
 
 Wind Tunnel at Insituto Balseiro 
-<center>
-<img src="/figures/tunel_balseiro.jpeg" alt="tunel_balseiro" width="250"/>
- </center>
+<p align="center">
+ <img src="/figures/tunel_balseiro.jpeg" alt="tunel_balseiro" width="250"/> 
+</p>
  
 | Flag instability | Stabilized Flag | Unstable Flag |
 |------------------|-----------------|---------------|
