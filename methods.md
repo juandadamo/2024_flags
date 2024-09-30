@@ -7,6 +7,10 @@ El principio de la técnica es sencillo: se proyecta un patrón conocido, típic
 
 
 
+<video src='https://github.com/user-attachments/assets/e2fa6604-dfa4-479c-b12e-9e7e84ab2852' width=60/>
+
+
+
 
 
 
