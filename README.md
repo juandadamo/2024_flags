@@ -16,6 +16,8 @@ Wind Tunnel at Insituto Balseiro
 
 [Methods](methods.md)
 
+[Dimensions](dimensions.md)
+
 
 
 
