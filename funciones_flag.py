@@ -29,12 +29,21 @@ x0s = x_s[np.nonzero(diff_signo_s)]
 BnL = np.zeros_like(x0s)
 for i,x0i in enumerate(x0s):
     BnL[i] = sc.optimize.fsolve(fun_modn,x0i,fprime=callable_fct)[0]
-display(Latex(f'Las raíces son $\\beta_1 L={BnL[0]:.3f}$, $\\beta_2 L={BnL[1]:.3f},\\ldots$'  )    )
+#display(Latex(f'Las raíces son $\\beta_1 L={BnL[0]:.3f}$, $\\beta_2 L={BnL[1]:.3f},\\ldots$'  )    )
 
 #deformacion elastica viga empotrada
 def w_n (Bn,x,A1=1,L=1):
     wn = A1*((np.cosh(Bn*x)-np.cos(Bn*x))+(np.cos(Bn*L)+np.cosh(Bn*L))/(np.sin(Bn*L)+np.sinh(Bn*L))*(np.sin(Bn*x)-np.sinh(Bn*x)))
     return wn
+
+
+
+def w_n_phase(Bn, x, phase=0, A1=1.0, L=1.0):
+    spatial_part = (np.cosh(Bn*x) - np.cos(Bn*x)) + \
+                  (np.cos(Bn*L) + np.cosh(Bn*L)) / \
+                  (np.sin(Bn*L) + np.sinh(Bn*L)) * \
+                  (np.sin(Bn*x) - np.sinh(Bn*x))
+    return A1 * spatial_part * np.cos(phase)  # phase en radianes
 
 # Define un objeto lamina flexible, con sus propiedades mecánicas
 class material:
@@ -87,5 +96,56 @@ def delta_turb(U):
     return delta_x*L_tunel
 def frec_kh(Um,theta):
     return 0.032*Um/theta
+
+
+def veloc_tunel_ib(frec):
+    rhoa = 1.2
+    frecs = np.array([10,12,14,16,18,20,22,24])
+    presiones = np.array([17.2,26.5, 39.5 , 54.5 , 73 , 93,115,141])
+    rhoa = 1.2
+    pbariloche = 91.92e3
+    patm = 101.3e3
+
+    pratio = pbariloche/patm
+
+    rhoa_b = rhoa*pratio
+    Veloc = np.sqrt(2*presiones/rhoa_b)
+    p1 = np.polyfit(frecs,Veloc,1)
+    f_vel = np.poly1d(p1)
+    return f_vel(frec)
         
    
+def delta_turb(x, U_inf, nu):
+    Re_x = (U_inf * x) / nu
+    delta = 0.37 * x * (Re_x)**(-0.2)
+    return delta
+import numpy as np
+
+def longitud_equivalente_capa_limite_turbulenta(delta, Uinf, nu):
+    """
+    Calcula la longitud x necesaria para alcanzar un espesor de capa límite turbulenta delta.
+
+    Parámetros:
+        delta (float): Espesor de capa límite turbulenta [m].
+        Uinf (float): Velocidad del flujo libre [m/s].
+        nu (float): Viscosidad cinemática del fluido [m²/s].
+
+    Retorna:
+        x (float): Longitud característica de la placa [m].
+    """
+    x = (delta / 0.37)**(5/4) * (Uinf / nu)**(1/4)
+    return x
+
+
+Ym = 50
+t = 75
+dens_sup = 80
+rho_papel = dens_sup/(t*1e-6)*1e-3
+Papel_80 = material('Papel 80gr/m2',t,rho_papel,Ym)
+B = Papel_80.B
+rho = rho_papel
+k1L = BnL[0]
+k2L = BnL[1]
+L = 130e-3
+Papel_80.L = L
+Papel_80.freq_nat()
