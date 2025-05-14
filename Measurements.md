@@ -31,3 +31,11 @@ $\theta_0$: momentum thickness $\sim$ boundary layer thickness (Valor relevado p
 $U_m=(U_1+U_2)/2$: mean velocity
 
 $f_{kh}$ Kelvin Helmoltz shear layer non forced frequency
+
+Stability Range 
+<p align="left">
+ <img src="/figures/figures/stability_ranges_1.png" alt="plot stability" width="250"/> 
+</p>
+<p align="right">
+ <img src="/figures/figures/stability_ranges_2.png" alt="plot stability" width="250"/> 
+</p>
