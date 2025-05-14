@@ -6,7 +6,7 @@
 
 [Dimensions](dimensions.md)
 
-### [Measurements](Measurements.md) 
+## [Measurements](Measurements.md) 
 
 
 Wind Tunnel at Insituto Balseiro 
