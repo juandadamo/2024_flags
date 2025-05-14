@@ -1,5 +1,14 @@
 ##  Flags Stabilization 
 
+[Ideas](discusion.md)
+
+[Methods](methods.md)
+
+[Dimensions](dimensions.md)
+
+### [Measurements](Measurements.md) 
+
+
 Wind Tunnel at Insituto Balseiro 
 <p align="center">
  <img src="/figures/tunel_balseiro.jpeg" alt="tunel_balseiro" width="250"/> 
@@ -12,12 +21,7 @@ Wind Tunnel at Insituto Balseiro
 
 
 
-[Ideas](discusion.md)
 
-[Methods](methods.md)
-
-[Dimensions](dimensions.md)
-[Measurements](Measurements.md)
 
 
 
