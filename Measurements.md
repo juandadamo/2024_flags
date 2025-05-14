@@ -34,8 +34,8 @@ $f_{kh}$ Kelvin Helmoltz shear layer non forced frequency
 
 Stability Range 
 <p align="left">
- <img src="/figures/figures/stability_ranges_1.png" alt="plot stability" width="250"/> 
+ <img src="/figures/stability_ranges_1.png" alt="plot stability" width="250"/> 
 </p>
 <p align="right">
- <img src="/figures/figures/stability_ranges_2.png" alt="plot stability" width="250"/> 
+ <img src="/figures/stability_ranges_2.png" alt="plot stability" width="250"/> 
 </p>
