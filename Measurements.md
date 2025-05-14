@@ -33,9 +33,10 @@ $U_m=(U_1+U_2)/2$: mean velocity
 $f_{kh}$ Kelvin Helmoltz shear layer non forced frequency
 
 Stability Range 
-<p align="left">
- <img src="/figures/stability_ranges_1.png" alt="plot stability" width="250"/> 
-</p>
-<p align="right">
- <img src="/figures/stability_ranges_2.png" alt="plot stability" width="250"/> 
-</p>
+| ![Plot 1](figures/stability_ranges_1.png) | ![Plot 2](figures/stability_ranges_2.png) |
+|-------------------------------------------|-------------------------------------------|
+
+Los rangos sombreados de color son claros para biestabilidad y mas intensos para inestabidad. Los simbolos marcan el inicio y el fin de cada régimen.
+
+En el gráfico de frecuencias, $f_n$ corresponde al segundo modo elástico. Será para estudiar...
+
