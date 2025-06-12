@@ -1,0 +1,48 @@
+% This file was created with tikzplotlib v0.10.1.
+\begin{tikzpicture}
+
+\definecolor{darkgray176}{RGB}{176,176,176}
+\definecolor{steelblue31119180}{RGB}{31,119,180}
+
+\begin{axis}[
+log basis y={10},
+tick align=outside,
+tick pos=left,
+title={test},
+x grid style={darkgray176},
+xlabel={$x$},
+xmajorgrids,
+xmin=-0.45, xmax=9.45,
+xtick style={color=black},
+y grid style={darkgray176},
+ylabel={y},
+ymajorgrids,
+ymin=0.895958459840762, ymax=10.0451085663051,
+ymode=log,
+ytick style={color=black},
+ytick={0.01,0.1,1,10,100,1000},
+yticklabels={
+  $\mathdefault{10^{-2}}$,
+  $\mathdefault{10^{-1}}$,
+  $\mathdefault{10^{0}}$,
+  $\mathdefault{10^{1}}$,
+  $\mathdefault{10^{2}}$,
+  $\mathdefault{10^{3}}$
+}
+]
+\addplot [semithick, steelblue31119180]
+table {%
+0 0
+1 1
+2 2
+3 3
+4 4
+5 5
+6 6
+7 7
+8 8
+9 9
+};
+\end{axis}
+
+\end{tikzpicture}
