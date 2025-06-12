@@ -23,6 +23,10 @@ from scipy.ndimage import distance_transform_edt
 from skimage.morphology import medial_axis
 plt.close('All')
 
+delta_x_px = 105
+delta_x = 15
+escalax = delta_x_px/delta_x  # px/mm
+
 if socket.gethostname() == 'CNRS304952':
     dir_root = r'D:/'
 else:
