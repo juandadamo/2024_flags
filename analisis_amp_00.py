@@ -24,10 +24,17 @@ from skimage.measure import label, regionprops
 from skimage.segmentation import clear_border
 
 
-dirw = '/home/juan/Documents/Publicaciones/2025_euromech/flag/article/figures/'
+if socket.gethostname() == 'CNRS304952':
+    dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
+else:
+    dirw = '/home/juan/Documents/Publicaciones/2025_euromech/flag/article/figures/'
 
 lista_full_2d = np.sort(glob.glob('data_out/full_freq*'))
 
+
+ 
+
+ 
 Velocidad, Amplitud = np.zeros((2,len(lista_full_2d)))
 for j, filej in enumerate(lista_full_2d[:]):
     A1 = np.load(filej)
@@ -43,7 +50,7 @@ for j, filej in enumerate(lista_full_2d[:]):
     label_image = label(A_clean)
 
 
-
+    # raise ValueError()
     aux = []
     for region in regionprops(label_image):
         if region.area>1020:
