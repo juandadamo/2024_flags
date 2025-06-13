@@ -33,20 +33,22 @@ else:
     dir_root = r'/home/juan/data/balseiro/'
 dir_data_2D = pd.read_csv(r'casos_2D_lista_archivos.csv')
 
-index_full = dir_data_2D['medida']=='full'
+caso = 'rect'
 
-casos_full = dir_data_2D[index_full]['nombre carpeta'].to_numpy()[:-2][::-1]
+index_selec = dir_data_2D['medida']==caso
+# raise ValueError()
+casos_selec = dir_data_2D[index_selec]['nombre carpeta'].to_numpy()[:-2][::-1]
 
-fmotor_full = dir_data_2D[index_full]['freq motor'].to_numpy()[:-2][::-1]
+fmotor_selec = dir_data_2D[index_selec]['freq motor'].to_numpy()[:-2][::-1]
 
-for j,caso_full_j in enumerate(casos_full):
-    files_list = np.sort(glob.glob(dir_root+caso_full_j+'/*.tiff'))
+for j,caso_selec_j in enumerate(casos_selec):
+    files_list = np.sort(glob.glob(dir_root+caso_selec_j+'/*.tiff'))
     # raise ValueError()
     nsnapshots = np.min((1000,len(files_list)))
 
     Amp_i = np.zeros((nsnapshots))
-    print(caso_full_j)
-    print(fmotor_full[j])
+    print(caso_selec_j)
+    print(fmotor_selec[j])
     for i,filei in enumerate(files_list[:nsnapshots][:]):
         A = tif.imread(filei)
         if i==0:
@@ -75,7 +77,7 @@ for j,caso_full_j in enumerate(casos_full):
 
     nx =  range(C.shape[1])
     dictsal = {'Imagen_sum':Asum,'A_curva_i':A_curva_i}
-    nombre_out = f'data_out/full_freq_{fmotor_full[j]}.npz'
+    nombre_out = f'data_out/'+caso+f'_freq_{fmotor_selec[j]}.npz'
     #raise ValueError()
     print(nombre_out)
     np.savez(nombre_out,**dictsal)
