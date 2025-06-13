@@ -26,6 +26,11 @@ delta_x_px = 105
 delta_x = 15
 escalax = delta_x_px/delta_x  # px/mm
 
+
+delta_y_px = 471
+delta_y = 50
+escalay = delta_y_px/delta_y  # px/mm
+
 if socket.gethostname() == 'CNRS304952':
     dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
 else:

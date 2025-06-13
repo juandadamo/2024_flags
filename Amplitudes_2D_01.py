@@ -33,7 +33,7 @@ else:
     dir_root = r'/home/juan/data/balseiro/'
 dir_data_2D = pd.read_csv(r'casos_2D_lista_archivos.csv')
 
-caso = 'rect'
+caso = 'triang'
 
 index_selec = dir_data_2D['medida']==caso
 # raise ValueError()
