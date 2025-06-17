@@ -46,7 +46,13 @@ else:
 
 caso = 'rect'
 caso = 'triang'
-# caso = 'full'
+caso = 'full'
+
+if caso == 'full':
+    npoints = 6
+    frec_c = 12
+
+
 lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*'))
 
 
@@ -96,8 +102,8 @@ for j, filej in enumerate(lista_caso_2d[:]):
         fig0.savefig(dirw+'image_label_amp_'+caso+'.png')
 fig,ax = plt.subplots()
 #Uc = Velocidad[0]
-frec_c = 12
-frec_c = 12
+
+
 Uc = veloc_tunel_ib(frec_c)
 U = Velocidad - Uc
 ax.plot(Velocidad,Amplitud,'ks',fillstyle='none',linestyle='none')
@@ -113,7 +119,7 @@ from scipy.stats import linregress
 # Excluimos el primer punto (U = 0, A^2 = 401^2 ≈ 160801) para ver el comportamiento
 slope, intercept, r_value, p_value, std_err = linregress(U[:-4], Amplitud[:-4]**2)
 
-p1 = np.polyfit(U[:5]**.5, Amplitud [:5],1)
+p1 = np.polyfit(U[:npoints]**.5, Amplitud [:npoints],1)
 fun_Amplitud = np.poly1d(p1)
 
 print(f"Pendiente: {slope:.1f}, Intercepto: {intercept:.1f}, R²: {r_value**2:.3f}")
@@ -132,4 +138,8 @@ ax3.legend()
 ax3.grid()
 fig3.tight_layout()
 fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png')
+
+
+
+# Contenido en frecuencia de la señal!!!!!!!
 
