@@ -22,28 +22,39 @@ from scipy.ndimage import distance_transform_edt
 from skimage.morphology import medial_axis
 from skimage.measure import label, regionprops
 from skimage.segmentation import clear_border
-delta_x_px = 105
-delta_x = 15
-escalax = delta_x_px/delta_x  # px/mm
+# delta_x_px = 105
+# delta_x = 15
+# escalax = delta_x_px/delta_x  # px/mm
 
 
-delta_y_px = 471
-delta_y = 50
-escalay = delta_y_px/delta_y  # px/mm
+# delta_y_px = 471
+# delta_y = 50
+# escalay = delta_y_px/delta_y  # px/mm
+
+# delta_x2_px = 201
+# delta_x2 = 28
+# escalax2 = delta_x2_px/delta_x2  # px/mm
+
+escalax = 1/0.138 # px/mm
+
 
 if socket.gethostname() == 'CNRS304952':
     dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
 else:
     dirw = '/home/juan/Documents/Publicaciones/2025_euromech/flag/article/figures/'
 
-lista_full_2d = np.sort(glob.glob('data_out/full_freq*'))
+
+caso = 'rect'
+caso = 'triang'
+# caso = 'full'
+lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*'))
 
 
  
 
  
-Velocidad, Amplitud = np.zeros((2,len(lista_full_2d)))
-for j, filej in enumerate(lista_full_2d[:]):
+Velocidad, Amplitud = np.zeros((2,len(lista_caso_2d)))
+for j, filej in enumerate(lista_caso_2d[:]):
     A1 = np.load(filej)
     Asum = A1['Imagen_sum']
     YT = A1['A_curva_i']
@@ -75,14 +86,14 @@ for j, filej in enumerate(lista_full_2d[:]):
         ax0.imshow(Asum)
         for YT_k in YT[100:150:10]:
             ax0.plot(YT_k,marker='o',color='tab:orange',markersize=0.5,linestyle='none')
-        fig0.savefig(dirw+'image_sum.png')
+        fig0.savefig(dirw+'image_sum_'+caso+'.png')
         #fig1,ax1 = plt.subplots()
         #ax1.imshow(label_image)
         ax0.plot(coord_amp[:,1],coord_amp[:,0],marker='o',fillstyle='none',linestyle='none',markersize=0.1,color='tab:orange')
-        fig0.savefig(dirw+'image_label.png')
+        fig0.savefig(dirw+'image_label_'+caso+'.png')
         ax0.plot([1,len(YT.T)],[aux[:,0].max(),aux[:,0].max()],color='w',linewidth=3)
         ax0.plot([1,len(YT.T)],[aux[:,1].min(),aux[:,1].min()],color='w',linewidth=3)
-        fig0.savefig(dirw+'image_label_amp.png')
+        fig0.savefig(dirw+'image_label_amp_'+caso+'.png')
 fig,ax = plt.subplots()
 #Uc = Velocidad[0]
 frec_c = 12
@@ -93,7 +104,7 @@ ax.plot(Velocidad,Amplitud,'ks',fillstyle='none',linestyle='none')
 ax.set_xlabel('$U$[m/s]')
 ax.set_ylabel('$A$')
 ax.grid()
-fig.savefig(dirw+'Amplitudes_full.png')
+fig.savefig(dirw+'Amplitudes_'+caso+'.png')
 
 
 
@@ -120,5 +131,5 @@ ax3.set_ylabel('$A$')
 ax3.legend()
 ax3.grid()
 fig3.tight_layout()
-fig3.savefig(dirw+'Amplitudes_full_ajuste.png')
+fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png')
 
