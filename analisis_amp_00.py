@@ -98,8 +98,8 @@ for j, filej in enumerate(lista_caso_2d[:]):
     delta_coord = np.abs(aux[:,0].max()-aux[:,1].min())
     # raise ValueError()
     Amplitud[j]  = delta_coord*1.0/ escalax  # mm
-    if j==7:
-        raise ValueError()
+    if j==0:
+        # raise ValueError()
         fig0,ax0 = plt.subplots()
         ax0.imshow(Asum)
         for YT_k in YT[100:150:10]:
@@ -126,21 +126,16 @@ fig.savefig(dirw+'Amplitudes_'+caso+'.png')
 
 
 
-from scipy.stats import linregress
-
-# Excluimos el primer punto (U = 0, A^2 = 401^2 ≈ 160801) para ver el comportamiento
-slope, intercept, r_value, p_value, std_err = linregress(U[:-4], Amplitud[:-4]**2)
 
 p1 = np.polyfit(U[:npoints]**.5, Amplitud [:npoints],1)
 fun_Amplitud = np.poly1d(p1)
 
-print(f"Pendiente: {slope:.1f}, Intercepto: {intercept:.1f}, R²: {r_value**2:.3f}")
 
 # Graficar ajuste
 fig3,ax3 = plt.subplots()
 
 ax3.plot(np.sqrt(U), Amplitud, 'ks', fillstyle='none', label='Data')
-Us = np.linspace(0,U[5],100)
+Us = np.linspace(0,U[npoints],100)
 # ax3.plot(Us, intercept + slope * Us[:], 'r--', label=f'Ajuste lineal ($R^2 = {r_value**2:.3f}$)')
 ax3.plot(Us**.5,fun_Amplitud(Us**.5), 'r--', label=f'Linear Fit')
 ax3.set_xlabel(r'$\sqrt{U - U_c}$[m/s]$^{1/2}$')

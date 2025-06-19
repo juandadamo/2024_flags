@@ -39,11 +39,11 @@ else:
 
 caso = 'rect'
 caso = 'triang'
-# caso = 'full'
+caso = 'full'
 
 if caso == 'full':
     npoints = 6
-    frec_c = 12.2
+    frec_c = 12.1
 elif caso == 'triang':
     npoints = 4
     frec_c = 11.4
@@ -73,8 +73,8 @@ for j, filej in enumerate(lista_caso_2d[:]):
     delta_coord = lim_superior - lim_inferior
     # raise ValueError()
     Amplitud[j]  = delta_coord*1.0/ escalax  # mm
-    if j==3:
-        # raise ValueError()
+    if j==0:
+        raise ValueError()
         fig0,ax0 = plt.subplots()
         ax0.imshow(Asum)
         for YT_k in YT[100:150:10]:
@@ -107,7 +107,7 @@ fun_Amplitud = np.poly1d(p1)
 fig3,ax3 = plt.subplots()
 
 ax3.plot(np.sqrt(U), Amplitud, 'ks', fillstyle='none', label='Data')
-Us = np.linspace(0,U[5],100)
+Us = np.linspace(0,U[npoints],100)
 # ax3.plot(Us, intercept + slope * Us[:], 'r--', label=f'Ajuste lineal ($R^2 = {r_value**2:.3f}$)')
 ax3.plot(Us**.5,fun_Amplitud(Us**.5), 'r--', label=f'Linear Fit')
 ax3.set_xlabel(r'$\sqrt{U - U_c}$[m/s]$^{1/2}$')
