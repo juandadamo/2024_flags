@@ -36,14 +36,14 @@ dir_data_2D = pd.read_csv(r'casos_2D_lista_archivos.csv')
 caso = 'full'
 
 index_selec = dir_data_2D['medida']==caso
-if caso == 'full':
-    index_selec[13:] =  False
+# if caso == 'full':
+#     index_selec[13:] =  False
 # raise ValueError()
 casos_selec = dir_data_2D[index_selec]['nombre carpeta'].to_numpy()[:][::-1]
 
 fmotor_selec = dir_data_2D[index_selec]['freq motor'].to_numpy()[:][::-1]
 
-for j,caso_selec_j in enumerate(casos_selec[1:]):
+for j,caso_selec_j in enumerate(casos_selec[:]):
     files_list = np.sort(glob.glob(dir_root+caso_selec_j+'/*.tiff'))
     # raise ValueError()
     nsnapshots = np.min((1000,len(files_list)))
@@ -84,7 +84,7 @@ for j,caso_selec_j in enumerate(casos_selec[1:]):
     print(nombre_out)
     np.savez(nombre_out,**dictsal)
 
-    raise ValueError()
+    # raise ValueError()
 fig,ax = plt.subplots()
 for i in range(1,1000,10):
     ax.plot(nx,A_curva_i[i],'o',linestyle='none',markersize=2,fillstyle='none')

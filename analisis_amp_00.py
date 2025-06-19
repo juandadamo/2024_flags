@@ -47,11 +47,11 @@ else:
 
 caso = 'rect'
 caso = 'triang'
-# caso = 'full'
+caso = 'full'
 
 if caso == 'full':
-    npoints = 6
-    frec_c = 12.2
+    npoints = 5
+    frec_c = 12.7
 elif caso == 'triang':
     npoints = 5
     frec_c = 13
@@ -59,7 +59,7 @@ elif caso == 'triang':
 
 lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*'))
 
-
+lista_caso_2d = np.delete(lista_caso_2d,[2,7,8])
  
 
  
@@ -98,7 +98,7 @@ for j, filej in enumerate(lista_caso_2d[:]):
     delta_coord = np.abs(aux[:,0].max()-aux[:,1].min())
     # raise ValueError()
     Amplitud[j]  = delta_coord*1.0/ escalax  # mm
-    if j==0:
+    if j==1:
         # raise ValueError()
         fig0,ax0 = plt.subplots()
         ax0.imshow(Asum)

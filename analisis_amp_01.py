@@ -39,7 +39,7 @@ else:
 
 caso = 'rect'
 caso = 'triang'
-caso = 'full'
+# caso = 'full'
 
 if caso == 'full':
     npoints = 6
@@ -64,17 +64,21 @@ for j, filej in enumerate(lista_caso_2d[:]):
     frec_j = float(filej.split('freq_')[-1].split('.npz')[0])
     Velocidad[j] =  veloc_tunel_ib(frec_j)
     # Detección de bordes con Canny
+
     edges = feature.canny(image, sigma=4)
     closed_edges = morphology.closing(edges, morphology.disk(radius=5))
     image[closed_edges] = 1
     image[np.logical_not(closed_edges)] = 0
+
+
+
     lim_superior =np.nonzero(image==1)[0].max()
     lim_inferior = np.nonzero(image==1)[0].min()
     delta_coord = lim_superior - lim_inferior
     # raise ValueError()
     Amplitud[j]  = delta_coord*1.0/ escalax  # mm
-    if j==0:
-        raise ValueError()
+    if j==2:
+        # raise ValueError()
         fig0,ax0 = plt.subplots()
         ax0.imshow(Asum)
         for YT_k in YT[100:150:10]:
