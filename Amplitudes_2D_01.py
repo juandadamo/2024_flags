@@ -37,9 +37,9 @@ caso = 'triang'
 
 index_selec = dir_data_2D['medida']==caso
 # raise ValueError()
-casos_selec = dir_data_2D[index_selec]['nombre carpeta'].to_numpy()[:-2][::-1]
+casos_selec = dir_data_2D[index_selec]['nombre carpeta'].to_numpy()[:][::-1]
 
-fmotor_selec = dir_data_2D[index_selec]['freq motor'].to_numpy()[:-2][::-1]
+fmotor_selec = dir_data_2D[index_selec]['freq motor'].to_numpy()[:][::-1]
 
 for j,caso_selec_j in enumerate(casos_selec):
     files_list = np.sort(glob.glob(dir_root+caso_selec_j+'/*.tiff'))

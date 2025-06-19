@@ -14,7 +14,8 @@ from IPython.display import Latex
 from funciones_flag import *
 from scipy.signal import find_peaks
 mks = ['s','o','>','p','v','^','*']
-from skimage.filters import threshold_otsu
+from skimage.filters import threshold_otsu, threshold_niblack, threshold_sauvola
+
 from skimage.morphology import skeletonize, thin, remove_small_objects,closing, square, disk, medial_axis,binary_opening,binary_closing
 from skimage.util import invert
 from skimage import data
@@ -46,11 +47,14 @@ else:
 
 caso = 'rect'
 caso = 'triang'
-caso = 'full'
+# caso = 'full'
 
 if caso == 'full':
     npoints = 6
-    frec_c = 12
+    frec_c = 12.2
+elif caso == 'triang':
+    npoints = 5
+    frec_c = 13
 
 
 lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*'))
@@ -63,17 +67,24 @@ Velocidad, Amplitud = np.zeros((2,len(lista_caso_2d)))
 for j, filej in enumerate(lista_caso_2d[:]):
     A1 = np.load(filej)
     Asum = A1['Imagen_sum']
+    
     YT = A1['A_curva_i']
     frec_j = float(filej.split('freq_')[-1].split('.npz')[0])
     Velocidad[j] =  veloc_tunel_ib(frec_j)
+    if np.logical_and(caso == 'triang', j>-1):
+        factor_thresh = 1
+        Asum = Asum**(1/3)
+    else:
+        factor_thresh = 1.5
 
-    umbral_intensidad = sk.filters.threshold_otsu(Asum)/1.5
+    print(f"Velocidad del túnel de viento: {Velocidad[j]:.2f} m/s")
+    umbral_intensidad = sk.filters.threshold_otsu(Asum)/factor_thresh
     A2 = Asum>= umbral_intensidad
     A_clean = binary_closing(A2, square(3))  # Elimina píxeles aislados
     A_clean = binary_opening(A_clean, square(3))  # Suaviza bordes
     label_image = label(A_clean)
-
-
+    image = Asum.copy()
+ 
     # raise ValueError()
     aux = []
     for region in regionprops(label_image):
@@ -87,7 +98,8 @@ for j, filej in enumerate(lista_caso_2d[:]):
     delta_coord = np.abs(aux[:,0].max()-aux[:,1].min())
     # raise ValueError()
     Amplitud[j]  = delta_coord*1.0/ escalax  # mm
-    if j==3:
+    if j==7:
+        raise ValueError()
         fig0,ax0 = plt.subplots()
         ax0.imshow(Asum)
         for YT_k in YT[100:150:10]:
