@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 from skimage import exposure
+from tikzplotlib import save as tikz_save   
  
 plt.rcParams.update({
     "text.usetex": True,          # Usar LaTeX para renderizar texto
@@ -36,8 +37,8 @@ Asum = A['Imagen_sum']
 YT = A['A_curva_i']
 ny0 = 491
 
-fig,ax = plt.subplots(1,2, figsize=(10, 5))
-ax0,ax1 = ax
+fig0,ax0 = plt.subplots()
+fig1,ax1 = plt.subplots()
 
 xmin,xmax = np.array([0  , Asum.shape[1]]) / escalax - nxorigin / escalax
 # Plot the image with the correct aspect ratio
@@ -64,6 +65,9 @@ cm1 = ax1.contourf(T,X/1,(YT-nyorigin)/escalax/1/Lbandera, cmap='binary',levels=
 ax1.set_xlabel('t (s)')
 ax1.set_ylabel('x (mm)')
 plt.colorbar(cm1, ax=ax1, label='$y/L$')
+
+
+fig0.savefig('figures/image_sum_full.png', dpi=300, bbox_inches='tight')
 figb, axb = plt.subplots()
 YT_Fourier = np.fft.fft(YT, axis=0)
 frec_YT = np.fft.fftfreq(YT.shape[0], d=1/fsampling)
@@ -88,4 +92,4 @@ axb.set_xticklabels([f"{tick:.1f}" for tick in axb.get_xticks()])  # Formatea et
 axb.grid()
 axb.set_xlabel('Frecuency (Hz)')
 axb.set_ylabel('PSD')
-
+tikz_save('figures/tikzs/freq_YT_full.tikz')

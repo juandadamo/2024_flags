@@ -23,19 +23,44 @@ from scipy.ndimage import distance_transform_edt
 from skimage.morphology import medial_axis
 from skimage.measure import label, regionprops
 from skimage.segmentation import clear_border
+if socket.gethostname() == 'CNRS304952':
+    dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
+else:
+    dirw = '/home/juan/Documents/Publicaciones/2025_euromech/flag/article/figures/'
+
 plt.close('all')
 
 # Opcional: Forzar la recolección de basura (gc) para liberar memoria
 import gc
 gc.collect()
+
+rhoa = 1.2
+rhoa_b = 1.0888  #densidad aire de bariloche
+nu = 1.5e-5*rhoa_b / rhoa
+Uinf = 12
+delta_cl = 18e-3 # espesor de capa limite para velocidad 12m/s
+
+#longitud caracteristica de la placa plana (tunel) en base a la medicion en Balseiro
+x_carac = longitud_equivalente_capa_limite_turbulenta(delta_cl,Uinf,nu)
+U = 12
+delta_U12 = delta_turb(x_carac,U,nu)
+
+
+
 fsampling = 1000 # Hz
 escalax = 1/0.138 # px/mm
 Lbandera = 128.5 # mm
 
-if socket.gethostname() == 'CNRS304952':
-    dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
-else:
-    dirw = '/home/juan/Documents/Publicaciones/2025_euromech/flag/article/figures/'
+
+
+Papel_80.L = Lbandera*1e-3  # Convertir a metros
+Papel_80.freq_nat()
+fn = np.zeros((3,1))
+for i in range(3):
+    fn[i] = Papel_80.fn[i]
+
+
+
 
 
 caso = 'rect'
@@ -97,7 +122,7 @@ for j, filej in enumerate(lista_caso_2d[:]):
     FYT = np.abs(Fourier_YT).sum(axis=0)
     freq_YT = np.fft.fftfreq(len(YT), d=1/fsampling)  
     peak_freqs, _ = find_peaks(FYT, height=0.1*np.max(FYT))
-    Frecuencia[j] = freq_YT[peak_freqs][0]
+    Frecuencia[j] = freq_YT[peak_freqs][FYT[peak_freqs].argmax()]
     print(f"Frecuencia de la señal: {Frecuencia[j]:.2f} Hz")
     plt.subplots()
     plt.semilogy(freq_YT, FYT)
@@ -113,6 +138,8 @@ ax.set_xlabel('$U$[m/s]')
 ax.set_ylabel('$A/L$')
 ax.grid()
 fig.savefig(dirw+'Amplitudes_'+caso+'.png')
+
+
 
 
 
@@ -140,3 +167,15 @@ fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png')
 
 # Contenido en frecuencia de la señal!!!!!!!
 
+fig4,ax4 = plt.subplots()
+ax4.plot(np.sqrt(U), Frecuencia*delta_turb(x_carac,Velocidad,nu)/Velocidad, 'ks', fillstyle='none')
+ax4.grid()
+ax4.set_ylabel(r'$f_{foil}\delta_w/U$')
+ax4.set_xlabel(r'$\sqrt{U-U_c}$')
+
+
+fig5,ax5 = plt.subplots()
+ax5.plot(Frecuencia*delta_turb(x_carac,Velocidad,nu)/Velocidad,Amplitud, 'ks', fillstyle='none')
+ax5.grid()
+ax5.set_ylabel(r'$A/L$')
+ax5.set_xlabel(r'$f_{foil}\delta_w/U$')
