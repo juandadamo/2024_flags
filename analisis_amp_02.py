@@ -27,11 +27,7 @@ from skimage.morphology import medial_axis
 from skimage.measure import label, regionprops
 from skimage.segmentation import clear_border
 from skimage import feature
-plt.close('all')
 
-# Opcional: Forzar la recolección de basura (gc) para liberar memoria
-import gc
-gc.collect()
 escalax = 1/0.138 # px/mm
 Lbandera = 128.5 # mm
 
@@ -43,7 +39,7 @@ else:
 
 caso = 'rect'
 caso = 'triang'
-# caso = 'full'
+caso = 'rect'
 
 if caso == 'full':
     npoints = 6
@@ -51,6 +47,9 @@ if caso == 'full':
 elif caso == 'triang':
     npoints = 4
     frec_c = 11.4
+elif caso == 'rect':
+    npoints = 2
+    frec_c = 17.9
 
 
 lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*'))

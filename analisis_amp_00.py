@@ -35,9 +35,13 @@ from skimage.segmentation import clear_border
 # delta_x2_px = 201
 # delta_x2 = 28
 # escalax2 = delta_x2_px/delta_x2  # px/mm
+plt.close('all')
 
+# Opcional: Forzar la recolección de basura (gc) para liberar memoria
+import gc
+gc.collect()
 escalax = 1/0.138 # px/mm
-
+Lbandera = 128.5 # mm
 
 if socket.gethostname() == 'CNRS304952':
     dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
@@ -115,12 +119,12 @@ for j, filej in enumerate(lista_caso_2d[:]):
 fig,ax = plt.subplots()
 #Uc = Velocidad[0]
 
-
+Amplitud = Amplitud/Lbandera
 Uc = veloc_tunel_ib(frec_c)
 U = Velocidad - Uc
 ax.plot(Velocidad,Amplitud,'ks',fillstyle='none',linestyle='none')
 ax.set_xlabel('$U$[m/s]')
-ax.set_ylabel('$A$')
+ax.set_ylabel('$A/L$')
 ax.grid()
 fig.savefig(dirw+'Amplitudes_'+caso+'.png')
 
@@ -139,7 +143,7 @@ Us = np.linspace(0,U[npoints],100)
 # ax3.plot(Us, intercept + slope * Us[:], 'r--', label=f'Ajuste lineal ($R^2 = {r_value**2:.3f}$)')
 ax3.plot(Us**.5,fun_Amplitud(Us**.5), 'r--', label=f'Linear Fit')
 ax3.set_xlabel(r'$\sqrt{U - U_c}$[m/s]$^{1/2}$')
-ax3.set_ylabel('$A$')
+ax3.set_ylabel('$A/L$')
 # ax3.plot([0,0],[1.78e5,5e5],'k--')
 ax3.legend()
 ax3.grid()
