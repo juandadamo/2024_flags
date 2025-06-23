@@ -169,5 +169,5 @@ ax1.grid()
 
 A.to_csv('Intervalos estabilidad.csv')
 B.to_csv('casos_3D_lista_archivos.csv')
-C.to_csv('casos_2D_lista_archivos.csv')
+# C.to_csv('casos_2D_lista_archivos.csv')
 D.to_csv('Estabilidad_L_variable.csv')
