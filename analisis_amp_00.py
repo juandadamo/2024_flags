@@ -23,9 +23,16 @@ from scipy.ndimage import distance_transform_edt
 from skimage.morphology import medial_axis
 from skimage.measure import label, regionprops
 from skimage.segmentation import clear_border
-# delta_x_px = 105
-# delta_x = 15
-# escalax = delta_x_px/delta_x  # px/mm
+plt.rcParams.update({
+    "text.usetex": True,          # Usar LaTeX para renderizar texto
+    "font.family": "serif",       # Familia de fuente (p. ej., Times New Roman)
+    "font.size": 18,              # Tamaño base de la fuente
+    "axes.titlesize": 16,         # Tamaño del título
+    "axes.labelsize": 18,         # Tamaño de etiquetas de ejes
+    "xtick.labelsize": 16,        # Tamaño de etiquetas del eje x
+    "ytick.labelsize": 16,        # Tamaño de etiquetas del eje y
+    "legend.fontsize": 17,        # Tamaño de la leyenda
+})
 
 
 # delta_y_px = 471
@@ -41,7 +48,7 @@ plt.close('all')
 import gc
 gc.collect()
 escalax = 1/0.138 # px/mm
-Lbandera = 128.5 # mm
+Lbandera = 138.5 # mm
 
 if socket.gethostname() == 'CNRS304952':
     dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
@@ -126,6 +133,9 @@ ax.plot(Velocidad,Amplitud,'ks',fillstyle='none',linestyle='none')
 ax.set_xlabel('$U$[m/s]')
 ax.set_ylabel('$A/L$')
 ax.grid()
+ax.set_ylim([0,0.8])
+ax.set_yticks(np.arange(0, 0.9, 0.1))
+fig.tight_layout()
 fig.savefig(dirw+'Amplitudes_'+caso+'.png')
 
 
@@ -147,6 +157,8 @@ ax3.set_ylabel('$A/L$')
 # ax3.plot([0,0],[1.78e5,5e5],'k--')
 ax3.legend()
 ax3.grid()
+ax3.set_ylim([0,0.8])
+ax3.set_yticks(np.arange(0, 0.9, 0.1))
 fig3.tight_layout()
 fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png')
 

@@ -179,3 +179,14 @@ ax5.plot(Frecuencia*delta_turb(x_carac,Velocidad,nu)/Velocidad,Amplitud, 'ks', f
 ax5.grid()
 ax5.set_ylabel(r'$A/L$')
 ax5.set_xlabel(r'$f_{foil}\delta_w/U$')
+
+
+fig5,ax5 = plt.subplots()
+delta_w = delta_turb(x_carac,Velocidad,nu)*0.5
+ax5.plot(Frecuencia*delta_w/(Velocidad/2),Amplitud, 'ks', fillstyle='none')
+ax5.grid()
+ax5.set_ylabel(r'$A/L$')
+ax5.set_xlabel(r'$f_{foil}\delta_w/U$')
+
+
+((Papel_80.E*Papel_80.thickness**3) / (rhoa*Papel_80.L**3))**0.5

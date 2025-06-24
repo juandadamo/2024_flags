@@ -2,17 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 from skimage import exposure
-from tikzplotlib import save as tikz_save   
- 
+# from tikzplotlib import save as tikz_save   
+from matplotlib import rcParams
+
 plt.rcParams.update({
     "text.usetex": True,          # Usar LaTeX para renderizar texto
     "font.family": "serif",       # Familia de fuente (p. ej., Times New Roman)
-    "font.size": 14,              # Tamaño base de la fuente
+    "font.size": 18,              # Tamaño base de la fuente
     "axes.titlesize": 16,         # Tamaño del título
-    "axes.labelsize": 14,         # Tamaño de etiquetas de ejes
-    "xtick.labelsize": 12,        # Tamaño de etiquetas del eje x
-    "ytick.labelsize": 12,        # Tamaño de etiquetas del eje y
-    "legend.fontsize": 12,        # Tamaño de la leyenda
+    "axes.labelsize": 18,         # Tamaño de etiquetas de ejes
+    "xtick.labelsize": 16,        # Tamaño de etiquetas del eje x
+    "ytick.labelsize": 16,        # Tamaño de etiquetas del eje y
+    "legend.fontsize": 17,        # Tamaño de la leyenda
 })
 
 # Cerrar todas las figuras existentes
@@ -51,23 +52,26 @@ Asum_normalized = (Asum - Asum.min()) / (Asum.max() - Asum.min())
 Asum_eq = exposure.equalize_adapthist(Asum_normalized, clip_limit=0.03)
 #ax0.contourf(X/1,Y,Asum_eq**.4, cmap='inferno',levels=100,edgecolor='none')
 
-ax0.imshow(Asum_eq**.4, cmap='inferno',extent=(xmin, xmax/1, ymin, ymax),origin='lower')
-ax0.set_xlabel('x (mm)')
-ax0.set_ylabel('y (mm)')
+cm0 = ax0.imshow(Asum_eq**.4, cmap='inferno',extent=(xmin, xmax/1, ymin, ymax),origin='lower')
+ax0.set_xlabel('$x$ (mm)')
+ax0.set_ylabel('$y$ (mm)')
 
 ax0.set_ylim([-50,50])
 ax0.set_aspect('equal')
 for i in range(0,1000,100):
     ax0.plot(X[0]/1,(YT[i]-nyorigin)/escalax,'w.',markersize=.1)
+ax0.plot(X[0]/1,(YT[3]-nyorigin)/escalax,'w.',markersize=1)
 X,T = np.meshgrid(np.arange(xmin, xmax, (xmax-xmin)/Asum.shape[1]),
                   np.arange(tmin, tmax, dt))
 cm1 = ax1.contourf(T,X/1,(YT-nyorigin)/escalax/1/Lbandera, cmap='binary',levels=20)
-ax1.set_xlabel('t (s)')
-ax1.set_ylabel('x (mm)')
+ax1.set_xlabel('$t$ (s)')
+ax1.set_ylabel('$x$ (mm)')
 plt.colorbar(cm1, ax=ax1, label='$y/L$')
 
-
-fig0.savefig('figures/image_sum_full.png', dpi=300, bbox_inches='tight')
+fig0.tight_layout()
+fig1.tight_layout()
+fig0.savefig('figures/ref_image_sum_full.png', dpi=300, bbox_inches='tight')
+fig1.savefig('figures/ref_spatio_temporal.png', dpi=300, bbox_inches='tight')
 figb, axb = plt.subplots()
 YT_Fourier = np.fft.fft(YT, axis=0)
 frec_YT = np.fft.fftfreq(YT.shape[0], d=1/fsampling)
@@ -86,10 +90,10 @@ axb.plot([Frecuencia,Frecuencia] , [y1,FYT[frec_YT>2][peak_freqs][0]], 'r', line
 axb.set_xlim([0,100])
 xticks1 = axb.get_xticks()
 axb.set_xticks(np.append(xticks1, Frecuencia))  # Agrega posición
-axb.set_xticklabels([f"{tick:.1f}" for tick in axb.get_xticks()])  # Formatea etiquetas
+axb.set_xticklabels([f"{tick:.0f}" for tick in axb.get_xticks()])  # Formatea etiquetas
 
  
 axb.grid()
 axb.set_xlabel('Frecuency (Hz)')
 axb.set_ylabel('PSD')
-tikz_save('figures/tikzs/freq_YT_full.tikz')
+figb.savefig('figures/Fourier_YT_full.png', dpi=300, bbox_inches='tight')
