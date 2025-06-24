@@ -23,6 +23,43 @@ from scipy.ndimage import distance_transform_edt
 from skimage.morphology import medial_axis
 from skimage.measure import label, regionprops
 from skimage.segmentation import clear_border
+if socket.gethostname() == 'CNRS304952':
+    dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
+else:
+    dirw = '/home/juan/Documents/Publicaciones/2025_euromech/flag/article/figures/'
+
+plt.close('all')
+
+# Opcional: Forzar la recolección de basura (gc) para liberar memoria
+import gc
+gc.collect()
+
+rhoa = 1.2
+rhoa_b = 1.0888  #densidad aire de bariloche
+nu = 1.5e-5*rhoa_b / rhoa
+Uinf = 12
+delta_cl = 18e-3 # espesor de capa limite para velocidad 12m/s
+
+#longitud caracteristica de la placa plana (tunel) en base a la medicion en Balseiro
+x_carac = longitud_equivalente_capa_limite_turbulenta(delta_cl,Uinf,nu)
+U = 12
+delta_U12 = delta_turb(x_carac,U,nu)
+
+
+
+fsampling = 1000 # Hz
+escalax = 1/0.138 # px/mm
+Lbandera = 138.5 # mm
+
+
+
+Papel_80.L = Lbandera*1e-3  # Convertir a metros
+Papel_80.freq_nat()
+fn = np.zeros((3,1))
+for i in range(3):
+    fn[i] = Papel_80.fn[i]
+
+
 plt.rcParams.update({
     "text.usetex": True,          # Usar LaTeX para renderizar texto
     "font.family": "serif",       # Familia de fuente (p. ej., Times New Roman)
@@ -33,39 +70,19 @@ plt.rcParams.update({
     "ytick.labelsize": 16,        # Tamaño de etiquetas del eje y
     "legend.fontsize": 17,        # Tamaño de la leyenda
 })
-
-
-# delta_y_px = 471
-# delta_y = 50
-# escalay = delta_y_px/delta_y  # px/mm
-
-# delta_x2_px = 201
-# delta_x2 = 28
-# escalax2 = delta_x2_px/delta_x2  # px/mm
-plt.close('all')
-
-# Opcional: Forzar la recolección de basura (gc) para liberar memoria
-import gc
-gc.collect()
-escalax = 1/0.138 # px/mm
-Lbandera = 138.5 # mm
-
-if socket.gethostname() == 'CNRS304952':
-    dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
-else:
-    dirw = '/home/juan/Documents/Publicaciones/2025_euromech/flag/article/figures/'
+ 
 
 
 caso = 'rect'
 caso = 'triang'
-caso = 'full'
+# caso = 'full'
 
 if caso == 'full':
     npoints = 5
     frec_c = 12.7
 elif caso == 'triang':
-    npoints = 5
-    frec_c = 13
+    npoints = 4
+    frec_c = 11.4
 
 
 lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*'))
@@ -74,7 +91,7 @@ lista_caso_2d = np.delete(lista_caso_2d,[2,7,8])
  
 
  
-Velocidad, Amplitud = np.zeros((2,len(lista_caso_2d)))
+Velocidad, Amplitud, Frecuencia = np.zeros((3,len(lista_caso_2d)))
 for j, filej in enumerate(lista_caso_2d[:]):
     A1 = np.load(filej)
     Asum = A1['Imagen_sum']
@@ -82,11 +99,7 @@ for j, filej in enumerate(lista_caso_2d[:]):
     YT = A1['A_curva_i']
     frec_j = float(filej.split('freq_')[-1].split('.npz')[0])
     Velocidad[j] =  veloc_tunel_ib(frec_j)
-    if np.logical_and(caso == 'triang', j>-1):
-        factor_thresh = 1
-        Asum = Asum**(1/3)
-    else:
-        factor_thresh = 1.5
+    factor_thresh = 1.0
 
     print(f"Velocidad del túnel de viento: {Velocidad[j]:.2f} m/s")
     umbral_intensidad = sk.filters.threshold_otsu(Asum)/factor_thresh
@@ -113,56 +126,57 @@ for j, filej in enumerate(lista_caso_2d[:]):
         # raise ValueError()
         fig0,ax0 = plt.subplots()
         ax0.imshow(Asum)
-        for YT_k in YT[100:350:10]:
+        for YT_k in YT[100:300:10]:
             ax0.plot(YT_k,marker='o',color='tab:orange',markersize=0.5,linestyle='none')
-        fig0.savefig(dirw+'snapshots_image_sum_'+caso+'.png')
-        #fig1,ax1 = plt.subplots()
-        #ax1.imshow(label_image)
-        ax0.plot(coord_amp[:,1],coord_amp[:,0],marker='o',fillstyle='none',linestyle='none',markersize=0.1,color='tab:orange')
-        fig0.savefig(dirw+'image_label_'+caso+'.png')
-        ax0.plot([1,len(YT.T)],[aux[:,0].max(),aux[:,0].max()],color='w',linewidth=3)
-        ax0.plot([1,len(YT.T)],[aux[:,1].min(),aux[:,1].min()],color='w',linewidth=3)
-        fig0.savefig(dirw+'image_label_amp_'+caso+'.png')
-fig,ax = plt.subplots()
-#Uc = Velocidad[0]
+    Fourier_YT = np.fft.fft(YT.T,axis=1)
+    FYT = np.abs(Fourier_YT).sum(axis=0)
+    freq_YT = np.fft.fftfreq(len(YT), d=1/fsampling)  
+    peak_freqs, _ = find_peaks(FYT, height=0.1*np.max(FYT))
+    peak_freqs = peak_freqs[freq_YT[peak_freqs]>0]
+    Frecuencia[j] = freq_YT[peak_freqs][FYT[peak_freqs].argmax()]
+    print(f"Frecuencia de la señal: {Frecuencia[j]:.2f} Hz")
+    plt.subplots()
+    plt.semilogy(freq_YT, FYT)
+    plt.xlim([0, 100])
+    plt.savefig(dirw+'Fourier_YT_'+caso+'_'+str(j)+'.png')
+
+plt.close('All')
+ 
+gc.collect()
+ 
 
 Amplitud = Amplitud/Lbandera
 Uc = veloc_tunel_ib(frec_c)
 U = Velocidad - Uc
-ax.plot(Velocidad,Amplitud,'ks',fillstyle='none',linestyle='none')
-ax.set_xlabel('$U$[m/s]')
-ax.set_ylabel('$A/L$')
-ax.grid()
-ax.set_ylim([0,0.8])
-ax.set_yticks(np.arange(0, 0.9, 0.1))
-fig.tight_layout()
-fig.savefig(dirw+'Amplitudes_'+caso+'.png')
+Velocidad_m = Velocidad/2
 
 
-
-
-p1 = np.polyfit(U[:npoints]**.5, Amplitud [:npoints],1)
-fun_Amplitud = np.poly1d(p1)
-
-
-# Graficar ajuste
-fig3,ax3 = plt.subplots()
-
-ax3.plot(np.sqrt(U), Amplitud, 'ks', fillstyle='none', label='Data')
-Us = np.linspace(0,U[npoints],100)
-# ax3.plot(Us, intercept + slope * Us[:], 'r--', label=f'Ajuste lineal ($R^2 = {r_value**2:.3f}$)')
-ax3.plot(Us**.5,fun_Amplitud(Us**.5), 'r--', label=f'Linear Fit')
-ax3.set_xlabel(r'$\sqrt{U - U_c}$[m/s]$^{1/2}$')
-ax3.set_ylabel('$A/L$')
-# ax3.plot([0,0],[1.78e5,5e5],'k--')
-ax3.legend()
-ax3.grid()
-ax3.set_ylim([0,0.8])
-ax3.set_yticks(np.arange(0, 0.9, 0.1))
-fig3.tight_layout()
-fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png')
 
 
 
 # Contenido en frecuencia de la señal!!!!!!!
 
+fig4,ax4 = plt.subplots()
+deltaw = delta_turb(x_carac,Velocidad,nu)
+ax4.plot(np.sqrt(U), Frecuencia*deltaw/Velocidad_m, 'ks', fillstyle='none')
+ax4.grid()
+ax4.set_ylabel(r'$f_{foil}\delta_w/U$')
+ax4.set_xlabel(r'$\sqrt{U-U_c}$')
+fig4.tight_layout()
+fig4.savefig(dirw+'Freq_sqrt_V'+caso+'.png')
+
+
+
+fig6,ax6 = plt.subplots()
+delta_w = delta_turb(x_carac,Velocidad,nu)
+
+ax6.plot(Frecuencia*delta_w/(Velocidad_m),Amplitud, 'ks', fillstyle='none')
+ax6.grid()
+ax6.set_ylabel(r'$A/L$')
+ax6.set_xlabel(r'$f_{foil}\delta_w/U$')
+ax6.set_ylim([0,0.8])
+ax6.set_yticks(np.arange(0, 0.9, 0.1))    
+fig6.tight_layout()
+fig6.savefig(dirw+'Freq_Amp'+caso+'.png')
+
+((Papel_80.E*Papel_80.thickness**3) / (rhoa*Papel_80.L**3))**0.5

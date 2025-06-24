@@ -49,7 +49,7 @@ delta_U12 = delta_turb(x_carac,U,nu)
 
 fsampling = 1000 # Hz
 escalax = 1/0.138 # px/mm
-Lbandera = 128.5 # mm
+Lbandera = 138.5 # mm
 
 
 
@@ -60,7 +60,17 @@ for i in range(3):
     fn[i] = Papel_80.fn[i]
 
 
-
+plt.rcParams.update({
+    "text.usetex": True,          # Usar LaTeX para renderizar texto
+    "font.family": "serif",       # Familia de fuente (p. ej., Times New Roman)
+    "font.size": 18,              # Tamaño base de la fuente
+    "axes.titlesize": 16,         # Tamaño del título
+    "axes.labelsize": 18,         # Tamaño de etiquetas de ejes
+    "xtick.labelsize": 16,        # Tamaño de etiquetas del eje x
+    "ytick.labelsize": 16,        # Tamaño de etiquetas del eje y
+    "legend.fontsize": 17,        # Tamaño de la leyenda
+})
+ 
 
 
 caso = 'rect'
@@ -69,7 +79,7 @@ caso = 'full'
 
 if caso == 'full':
     npoints = 5
-    frec_c = 12.7
+    frec_c = 12.4
 elif caso == 'triang':
     npoints = 5
     frec_c = 13
@@ -127,66 +137,47 @@ for j, filej in enumerate(lista_caso_2d[:]):
     plt.subplots()
     plt.semilogy(freq_YT, FYT)
     plt.xlim([0, 100])
-fig,ax = plt.subplots()
-#Uc = Velocidad[0]
+    plt.savefig(dirw+'Fourier_YT_'+caso+'_'+str(j)+'.png')
+
+plt.close('All')
+ 
+gc.collect()
+ 
 
 Amplitud = Amplitud/Lbandera
 Uc = veloc_tunel_ib(frec_c)
 U = Velocidad - Uc
-ax.plot(Velocidad,Amplitud,'ks',fillstyle='none',linestyle='none')
-ax.set_xlabel('$U$[m/s]')
-ax.set_ylabel('$A/L$')
-ax.grid()
-fig.savefig(dirw+'Amplitudes_'+caso+'.png')
-
-
-
-
-
-
+Velocidad_m = Velocidad/2
 p1 = np.polyfit(U[:npoints]**.5, Amplitud [:npoints],1)
 fun_Amplitud = np.poly1d(p1)
 
 
-# Graficar ajuste
-fig3,ax3 = plt.subplots()
-
-ax3.plot(np.sqrt(U), Amplitud, 'ks', fillstyle='none', label='Data')
-Us = np.linspace(0,U[npoints],100)
-# ax3.plot(Us, intercept + slope * Us[:], 'r--', label=f'Ajuste lineal ($R^2 = {r_value**2:.3f}$)')
-ax3.plot(Us**.5,fun_Amplitud(Us**.5), 'r--', label=f'Linear Fit')
-ax3.set_xlabel(r'$\sqrt{U - U_c}$[m/s]$^{1/2}$')
-ax3.set_ylabel('$A/L$')
-# ax3.plot([0,0],[1.78e5,5e5],'k--')
-ax3.legend()
-ax3.grid()
-fig3.tight_layout()
-fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png')
 
 
 
 # Contenido en frecuencia de la señal!!!!!!!
 
 fig4,ax4 = plt.subplots()
-ax4.plot(np.sqrt(U), Frecuencia*delta_turb(x_carac,Velocidad,nu)/Velocidad, 'ks', fillstyle='none')
+deltaw = delta_turb(x_carac,Velocidad,nu)
+ax4.plot(np.sqrt(U), Frecuencia*deltaw/Velocidad_m, 'ks', fillstyle='none')
 ax4.grid()
 ax4.set_ylabel(r'$f_{foil}\delta_w/U$')
 ax4.set_xlabel(r'$\sqrt{U-U_c}$')
+fig4.tight_layout()
+fig4.savefig(dirw+'Freq_sqrt_V'+caso+'.png')
 
 
-fig5,ax5 = plt.subplots()
-ax5.plot(Frecuencia*delta_turb(x_carac,Velocidad,nu)/Velocidad,Amplitud, 'ks', fillstyle='none')
-ax5.grid()
-ax5.set_ylabel(r'$A/L$')
-ax5.set_xlabel(r'$f_{foil}\delta_w/U$')
 
+fig6,ax6 = plt.subplots()
+delta_w = delta_turb(x_carac,Velocidad,nu)
 
-fig5,ax5 = plt.subplots()
-delta_w = delta_turb(x_carac,Velocidad,nu)*0.5
-ax5.plot(Frecuencia*delta_w/(Velocidad/2),Amplitud, 'ks', fillstyle='none')
-ax5.grid()
-ax5.set_ylabel(r'$A/L$')
-ax5.set_xlabel(r'$f_{foil}\delta_w/U$')
-
+ax6.plot(Frecuencia*delta_w/(Velocidad_m),Amplitud, 'ks', fillstyle='none')
+ax6.grid()
+ax6.set_ylabel(r'$A/L$')
+ax6.set_xlabel(r'$f_{foil}\delta_w/U$')
+ax6.set_ylim([0,0.8])
+ax6.set_yticks(np.arange(0, 0.9, 0.1))    
+fig6.tight_layout()
+fig6.savefig(dirw+'Freq_Amp'+caso+'.png')
 
 ((Papel_80.E*Papel_80.thickness**3) / (rhoa*Papel_80.L**3))**0.5
