@@ -23,6 +23,7 @@ from scipy.ndimage import distance_transform_edt
 from skimage.morphology import medial_axis
 from skimage.measure import label, regionprops
 from skimage.segmentation import clear_border
+from skimage import feature, morphology
 if socket.gethostname() == 'CNRS304952':
     dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
 else:
@@ -74,57 +75,35 @@ plt.rcParams.update({
 
 
 caso = 'rect'
-caso = 'triang'
-caso = 'full'
-
-if caso == 'full':
-    npoints = 5
-    frec_c = 12.7
-elif caso == 'triang':
-    npoints = 5
-    frec_c = 13
+ 
+frec_c = 17.9
 
 
 lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*'))
 
-lista_caso_2d = np.delete(lista_caso_2d,[2,7,8])
- 
-
  
 Velocidad, Amplitud, Frecuencia = np.zeros((3,len(lista_caso_2d)))
-
 for j, filej in enumerate(lista_caso_2d[:]):
     A1 = np.load(filej)
     Asum = A1['Imagen_sum']
-    
+
+
+
+    # Cargar imagen en escala de grises
+    image = Asum**.12
     YT = A1['A_curva_i']
     frec_j = float(filej.split('freq_')[-1].split('.npz')[0])
     Velocidad[j] =  veloc_tunel_ib(frec_j)
-    if np.logical_and(caso == 'triang', j>-1):
-        factor_thresh = 1
-        Asum = Asum**(1/3)
-    else:
-        factor_thresh = 1.5
+    # Detección de bordes con Canny
 
-    print(f"Velocidad del túnel de viento: {Velocidad[j]:.2f} m/s")
-    umbral_intensidad = sk.filters.threshold_otsu(Asum)/factor_thresh
-    A2 = Asum>= umbral_intensidad
-    A_clean = binary_closing(A2, square(3))  # Elimina píxeles aislados
-    A_clean = binary_opening(A_clean, square(3))  # Suaviza bordes
-    label_image = label(A_clean)
-    image = Asum.copy()
- 
-    # raise ValueError()
-    aux = []
-    for region in regionprops(label_image):
-        if region.area>1020:
-            coord_amp = region.coords
-            aux.append((coord_amp[:,0].max(),coord_amp[:,0].min()))
+    edges = feature.canny(image, sigma=4)
+    closed_edges = morphology.closing(edges, morphology.disk(radius=5))
+    image[closed_edges] = 1
+    image[np.logical_not(closed_edges)] = 0
 
-    aux = np.asarray(aux)
-
-    delta_coord = np.abs(coord_amp[:,0].max()-coord_amp[:,0].min())
-    delta_coord = np.abs(aux[:,0].max()-aux[:,1].min())
+    lim_superior =np.nonzero(image==1)[0].max()
+    lim_inferior = np.nonzero(image==1)[0].min()
+    delta_coord = lim_superior - lim_inferior
     # raise ValueError()
     Amplitud[j]  = delta_coord*1.0/ escalax  # mm
 
@@ -132,9 +111,11 @@ for j, filej in enumerate(lista_caso_2d[:]):
     FYT = np.abs(Fourier_YT).sum(axis=0)
     freq_YT = np.fft.fftfreq(len(YT), d=1/fsampling)  
     peak_freqs, _ = find_peaks(FYT, height=0.1*np.max(FYT))
+    peak_freqs = peak_freqs[freq_YT[peak_freqs]>0]
     Frecuencia[j] = freq_YT[peak_freqs][FYT[peak_freqs].argmax()]
     print(f"Frecuencia de la señal: {Frecuencia[j]:.2f} Hz")
     plt.subplots()
+
     plt.semilogy(freq_YT[freq_YT>0], FYT[freq_YT>0], 'k-')
     plt.grid()
     plt.xlabel('Frecuency (Hz)')
@@ -153,14 +134,8 @@ Amplitud = Amplitud/Lbandera
 Uc = veloc_tunel_ib(frec_c)
 U = Velocidad - Uc
 Velocidad_m = Velocidad/2
-p1 = np.polyfit(U[:npoints]**.5, Amplitud [:npoints],1)
-fun_Amplitud = np.poly1d(p1)
 
 
-
-
-
-# Contenido en frecuencia de la señal!!!!!!!
 
 fig4,ax4 = plt.subplots()
 deltaw = delta_turb(x_carac,Velocidad,nu)
@@ -178,14 +153,14 @@ delta_w = delta_turb(x_carac,Velocidad,nu)
 
 ax6.plot(Frecuencia*delta_w/(Velocidad_m),Amplitud, 'ks', fillstyle='none')
 ax6.grid()
-ax6.set_xlabel(r'$A/L$')
-ax6.set_ylabel(r'$f_{foil}\delta_w/U$')
+ax6.set_ylabel(r'$A/L$')
+ax6.set_xlabel(r'$f_{foil}\delta_w/U$')
 ax6.set_ylim([0,0.8])
 ax6.set_yticks(np.arange(0, 0.9, 0.1))    
 fig6.tight_layout()
 fig6.savefig(dirw+'Freq_Amp'+caso+'.png')
 
-((Papel_80.E*Papel_80.thickness**3) / (rhoa*Papel_80.L**3))**0.5
+
 
 
 fig7,ax7 = plt.subplots()
@@ -198,3 +173,6 @@ ax7.set_xlim([6,15])
 # ax7.set_yticks(np.arange(0, 0.9, 0.1))    
 fig7.tight_layout()
 fig7.savefig(dirw+'Freq_Veloc_'+caso+'.png')
+
+
+Cauchy =  (rhoa*Papel_80.L**3*U**2) / (Papel_80.E*Papel_80.thickness**3)
