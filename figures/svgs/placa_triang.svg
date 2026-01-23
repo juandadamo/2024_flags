@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (1:1.4.2+202505120737+ebf0e940d0)"
+   sodipodi:docname="placa_triang.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showguides="false"
+     inkscape:zoom="0.90709658"
+     inkscape:cx="243.63448"
+     inkscape:cy="286.6288"
+     inkscape:window-width="1854"
+     inkscape:window-height="987"
+     inkscape:window-x="66"
+     inkscape:window-y="55"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-dasharray:none;stroke-opacity:1"
+       d="m 93.572444,29.575552 -17.875527,6.993204 c 4.355053,2.45399 16.013339,6.973978 18.024552,8.175803 L 75.796067,51.69007 c 4.355053,2.45399 16.013337,6.973976 18.07978,8.204303 L 76.00567,66.868385 c 4.355053,2.45399 16.013344,6.973979 18.024555,8.175802 L 76.10483,81.989698 c 4.355052,2.45399 16.013332,6.973978 18.087329,8.153121 l -17.86263,6.92284 c 4.355052,2.453989 16.013344,6.973981 18.024555,8.175801 l -17.925397,6.94551 c 4.355053,2.45399 16.013335,6.97398 18.001805,8.20778 l -17.948148,6.9775 c 4.355053,2.45398 16.013342,6.97397 18.024556,8.17579 l -17.925399,6.94551 c 4.355053,2.45399 16.013334,6.97399 18.199949,8.17179 l -76.990927,0.17597 0.330657,-121.493318 75.493566,0.09247"
+       id="path1-6"
+       sodipodi:nodetypes="cccccccccccccccccccc" />
+  </g>
+</svg>

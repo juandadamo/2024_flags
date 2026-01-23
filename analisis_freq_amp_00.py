@@ -27,7 +27,7 @@ if socket.gethostname() == 'CNRS304952':
     dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
 else:
     dirw = '/home/juan/Documents/Publicaciones/2025_euromech/flag/article/figures/'
-
+dirw = 'figures/'
 plt.close('all')
 
 # Opcional: Forzar la recolección de basura (gc) para liberar memoria
@@ -144,6 +144,10 @@ for j, filej in enumerate(lista_caso_2d[:]):
     plt.tight_layout()
     plt.savefig(dirw+'Fourier_YT_'+caso+'_'+str(j)+'.png')
 
+    plt.subplots()
+    plt.contourf(YT.T, cmap='binary',levels=20)
+    plt.savefig(dirw+'SpatioT_YT_'+caso+'_'+str(j)+'.png')
+
 plt.close('All')
  
 gc.collect()
@@ -164,12 +168,15 @@ fun_Amplitud = np.poly1d(p1)
 
 fig4,ax4 = plt.subplots()
 deltaw = delta_turb(x_carac,Velocidad,nu)
-ax4.plot(np.sqrt(U), Frecuencia*deltaw/Velocidad_m, 'ks', fillstyle='none')
+ax4.plot(Velocidad, Frecuencia*deltaw/Velocidad_m, 'ks', fillstyle='none')
 ax4.grid()
+ax4.set_ylim([0.045, 0.065])
 ax4.set_ylabel(r'$f_{foil}\delta_w/U$')
-ax4.set_xlabel(r'$\sqrt{U-U_c}$')
+# ax4.set_xlabel(r'$\sqrt{U-U_c}$ [m/s$^{1/2}$]')
+ax4.set_xlabel(r'$U$ [m/s]')
+# ax4.set_xlim([0,2.5])
 fig4.tight_layout()
-fig4.savefig(dirw+'Freq_sqrt_V'+caso+'.png')
+fig4.savefig(dirw+'Freq_adim_V'+caso+'.png',dpi=300, bbox_inches='tight')
 
 
 
@@ -183,7 +190,7 @@ ax6.set_ylabel(r'$f_{foil}\delta_w/U$')
 ax6.set_ylim([0,0.8])
 ax6.set_yticks(np.arange(0, 0.9, 0.1))    
 fig6.tight_layout()
-fig6.savefig(dirw+'Freq_Amp'+caso+'.png')
+fig6.savefig(dirw+'Freq_Amp'+caso+'.png',dpi=300, bbox_inches='tight')
 
 ((Papel_80.E*Papel_80.thickness**3) / (rhoa*Papel_80.L**3))**0.5
 
@@ -191,10 +198,10 @@ fig6.savefig(dirw+'Freq_Amp'+caso+'.png')
 fig7,ax7 = plt.subplots()
 ax7.plot(Velocidad,Frecuencia, 'ks', fillstyle='none')
 ax7.grid()
-ax7.set_xlabel(r'$U$')
+ax7.set_xlabel(r'$U$ [m/s]')
 ax7.set_ylabel(r'$f_{foil}$ [hz]')
 ax7.set_ylim([9,26])
 ax7.set_xlim([6,15])
 # ax7.set_yticks(np.arange(0, 0.9, 0.1))    
 fig7.tight_layout()
-fig7.savefig(dirw+'Freq_Veloc_'+caso+'.png')
+fig7.savefig(dirw+'Freq_Veloc_'+caso+'.png',dpi=300, bbox_inches='tight')

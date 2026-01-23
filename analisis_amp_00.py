@@ -34,7 +34,7 @@ plt.rcParams.update({
     "legend.fontsize": 17,        # Tamaño de la leyenda
 })
 
-
+nu = 1.5e-5  # viscosidad cinemática del aire a 20 grados Celsius
 # delta_y_px = 471
 # delta_y = 50
 # escalay = delta_y_px/delta_y  # px/mm
@@ -55,7 +55,7 @@ if socket.gethostname() == 'CNRS304952':
 else:
     dirw = '/home/juan/Documents/Publicaciones/2025_euromech/flag/article/figures/'
 
-
+dirw = 'figures/'
 caso = 'rect'
 caso = 'triang'
 caso = 'full'
@@ -109,20 +109,19 @@ for j, filej in enumerate(lista_caso_2d[:]):
     delta_coord = np.abs(aux[:,0].max()-aux[:,1].min())
     # raise ValueError()
     Amplitud[j]  = delta_coord*1.0/ escalax  # mm
-    if j==1:
+    # if j==1:
         # raise ValueError()
-        fig0,ax0 = plt.subplots()
-        ax0.imshow(Asum)
-        for YT_k in YT[100:350:10]:
-            ax0.plot(YT_k,marker='o',color='tab:orange',markersize=0.5,linestyle='none')
-        fig0.savefig(dirw+'snapshots_image_sum_'+caso+'.png')
-        #fig1,ax1 = plt.subplots()
-        #ax1.imshow(label_image)
-        ax0.plot(coord_amp[:,1],coord_amp[:,0],marker='o',fillstyle='none',linestyle='none',markersize=0.1,color='tab:orange')
-        fig0.savefig(dirw+'image_label_'+caso+'.png')
-        ax0.plot([1,len(YT.T)],[aux[:,0].max(),aux[:,0].max()],color='w',linewidth=3)
-        ax0.plot([1,len(YT.T)],[aux[:,1].min(),aux[:,1].min()],color='w',linewidth=3)
-        fig0.savefig(dirw+'image_label_amp_'+caso+'.png')
+    fig0,ax0 = plt.subplots()
+    ax0.imshow(Asum,cmap='inferno',origin='lower')
+    # for k,YT_k in enumerate(YT[100:250:10]):
+    #     if k==0:
+    #         ax0.plot(YT_k,marker='o',color='white',markersize=0.5,linestyle='none')
+    #     ax0.plot(YT_k,marker='o',color='white',markersize=0.05,linestyle='none')
+    fig0.savefig(dirw+'snapshots_image_sum_'+caso+f'V{int(Velocidad[j]*100):0d}'+'.png',dpi=300, bbox_inches='tight')
+    #fig1,ax1 = plt.subplots()
+    #ax1.imshow(label_image)
+    plt.close(fig0)
+
 fig,ax = plt.subplots()
 #Uc = Velocidad[0]
 
@@ -136,7 +135,7 @@ ax.grid()
 ax.set_ylim([0,0.8])
 ax.set_yticks(np.arange(0, 0.9, 0.1))
 fig.tight_layout()
-fig.savefig(dirw+'Amplitudes_'+caso+'.png')
+fig.savefig(dirw+'Amplitudes_'+caso+'.png',dpi=300, bbox_inches='tight')
 
 
 
@@ -148,19 +147,21 @@ fun_Amplitud = np.poly1d(p1)
 # Graficar ajuste
 fig3,ax3 = plt.subplots()
 
-ax3.plot(np.sqrt(U), Amplitud, 'ks', fillstyle='none', label='Data')
+ax3.plot(Velocidad * Lbandera*1e-3/nu, Amplitud, 'ks', fillstyle='none')
 Us = np.linspace(0,U[npoints],100)
 # ax3.plot(Us, intercept + slope * Us[:], 'r--', label=f'Ajuste lineal ($R^2 = {r_value**2:.3f}$)')
-ax3.plot(Us**.5,fun_Amplitud(Us**.5), 'r--', label=f'Linear Fit')
-ax3.set_xlabel(r'$\sqrt{U - U_c}$[m/s]$^{1/2}$')
+# ax3.plot(,fun_Amplitud(Us**.5), 'r--', label=f'Linear Fit')
+# ax3.set_xlabel(r'$\sqrt{U - U_c}$[m/s]$^{1/2}$')
+ax3.set_xlabel(r'Re')
 ax3.set_ylabel('$A/L$')
 # ax3.plot([0,0],[1.78e5,5e5],'k--')
-ax3.legend()
+# ax3.legend()
 ax3.grid()
 ax3.set_ylim([0,0.8])
+# ax3.set_xlim([0,2.5])
 ax3.set_yticks(np.arange(0, 0.9, 0.1))
 fig3.tight_layout()
-fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png')
+fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png',dpi=300, bbox_inches='tight')
 
 
 

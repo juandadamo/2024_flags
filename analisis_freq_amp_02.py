@@ -175,4 +175,4 @@ fig7.tight_layout()
 fig7.savefig(dirw+'Freq_Veloc_'+caso+'.png')
 
 
-Cauchy =  (rhoa*Papel_80.L**3*U**2) / (Papel_80.E*Papel_80.thickness**3)
+Cauchy =  (rhoa*Papel_80.L**3*Velocidad**2) / (Papel_80.E*Papel_80.thickness**3)
