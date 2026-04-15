@@ -2,6 +2,8 @@
 # coding: utf-8
 
 from IPython.display import display, HTML
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -15,6 +17,7 @@ plt.rc('font', family='serif', size=18)
 plt.rc('text', usetex=True)
 
 plt.close('all')
+
 dictflag = {'Caso':['Full','Segmented rectangular','Segmented Triangular'],'f_bistable':np.zeros((3)),'f_flutter':np.zeros((3)),'U_bistable':np.zeros((3)),'U_flutter':np.zeros((3))}
 A = pd.DataFrame.from_dict(dictflag)
 
@@ -213,7 +216,7 @@ ax1.grid()
 U_B = (Papel_80.B/(D['L']*0.01)**3/rhoa_b)**0.5
 u_0 = D['U_bistable']/U_B
 
-u_0_flutter = D['U_flutter']/U_B
+u_0_flutter = D['U_flutter']*0.5/U_B
 
 mu_f_s = rhoa_b*D['L']*0.01/(Papel_80.rho*Papel_80.thickness)
 
@@ -327,13 +330,45 @@ df_nuevo = pd.DataFrame(data_nuevo)
 # Crear DataFrame de pandas
 L_s1 = np.arange(60,105,5)
 L_s2 = np.arange(110,170,10)
-L_s = np.hstack((L_s1,L_s2))
+L_s = np.hstack((L_s1,L_s2))*1e-3
 U_stop = np.array([15.71,13.95,12.56,12.56,11.90,11.31,10.95,10.07,9.92,9.48,8.16,7.21,6.77,6.77,6.40])
 
-U_B = (Papel_80.B/(L_s*1e-3)**3/rhoa_b)**0.5
+
+U_B = 1/L_s * (Papel_80.B/Papel_80.rho/Papel_80.thickness)**.5
+
 u_0 = U_stop/U_B
-mu_f_s = rhoa_b*L_s*1e-3/(Papel_80.rho*Papel_80.thickness)
+mu_f_s = rhoa_b*L_s/(Papel_80.rho*Papel_80.thickness)
 fig5,ax5 = plt.subplots()
 ax5.plot(L_s,U_stop,'o')
-ax.plot(L_s/10,U_stop,'v')
-ax2.plot(mu_f_s,u_0,'v')
+ax.plot(L_s*100,U_stop,'v')
+ax2.plot(mu_f_s,u_0,'v',markersize=10,fillstyle='none')
+
+
+
+data_ustop = pd.read_csv('datos_flutter_ustop.csv',decimal=',')
+data_uonset = pd.read_csv('datos_flutter_uonset.csv',decimal=',')
+fig5,ax5 = plt.subplots()
+
+ax5.plot(data_ustop['L'],data_ustop['Ustop'],'o')
+ax5.plot(data_uonset['L'],data_uonset['Uonset'],'s')
+
+
+Ustop = data_ustop['Ustop']
+Uonset = data_uonset['Uonset']
+L = data_ustop['L']*1e-3
+L2 = data_uonset['L']*1e-3
+UB = 1/L * (Papel_80.B/Papel_80.rho/Papel_80.thickness)**.5
+UB2 = 1/L2 * (Papel_80.B/Papel_80.rho/Papel_80.thickness)**.5
+sigma = rhoa_b*L/(rho_papel*Papel_80.thickness)
+sigma2 = rhoa_b*L2/(rho_papel*Papel_80.thickness)
+
+fig6,ax6 = plt.subplots()
+ax6.plot(sigma,Ustop/UB,'s')
+ax2.plot(sigma,Ustop/UB,'s')
+
+
+ax6.plot(sigma2,Uonset/UB2,'o')
+ax2.plot(sigma2,Uonset/UB2,'o')
+
+
+IM = plt.imread('raynaud_mulleners.png')

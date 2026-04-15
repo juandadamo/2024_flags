@@ -23,6 +23,8 @@ from scipy.ndimage import distance_transform_edt
 from skimage.morphology import medial_axis
 from skimage.measure import label, regionprops
 from skimage.segmentation import clear_border
+
+from tikzplotlib import save as tikz_save
 plt.rcParams.update({
     "text.usetex": True,          # Usar LaTeX para renderizar texto
     "font.family": "serif",       # Familia de fuente (p. ej., Times New Roman)
@@ -43,7 +45,8 @@ nu = 1.5e-5  # viscosidad cinemática del aire a 20 grados Celsius
 # delta_x2 = 28
 # escalax2 = delta_x2_px/delta_x2  # px/mm
 plt.close('all')
-
+rhoa = 1.2
+rhoa_b = 1.0888  #densidad aire de bariloche
 # Opcional: Forzar la recolección de basura (gc) para liberar memoria
 import gc
 gc.collect()
@@ -68,7 +71,7 @@ elif caso == 'triang':
     frec_c = 13
 
 
-lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*'))
+lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*.npz'))
 
 lista_caso_2d = np.delete(lista_caso_2d,[2,7,8])
  
@@ -163,7 +166,22 @@ ax3.set_yticks(np.arange(0, 0.9, 0.1))
 fig3.tight_layout()
 fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png',dpi=300, bbox_inches='tight')
 
+L = 138e-3
 
+UB = 1/L * (Papel_80.B/Papel_80.rho/Papel_80.thickness)**.5
 
+sigma = rhoa_b*L/(rho_papel*Papel_80.thickness)
+
+fig4,ax4 = plt.subplots()
+ax4.plot(Velocidad/2 /UB, Amplitud, 'ks', fillstyle='none')
+ax4.set_ylim([0,1])
+
+ax4.plot(12.18/2/UB,0,'o',markersize=10,fillstyle='none',color='k' )
+ax4.plot(7.63/2/UB,0,'o',markersize=10,fillstyle='none',color='k' )
+ax4.annotate("",xytext=(7.63/2/UB,0 ),xy=(7.63/2/UB ,Amplitud[0]), arrowprops=dict(arrowstyle="<-"))
+ax4.annotate("",xytext=(12.18/2/UB,0 ),xy=(12.18/2/UB ,Amplitud[-3]), arrowprops=dict(arrowstyle="->"))
+ax4.grid()
+ax4.set_ylabel('$A/L$')
+ax4.set_xlabel(r'$u^*=u_\infty/2 L\sqrt{\rho_s e/B}$')
 # Contenido en frecuencia de la señal!!!!!!!
-
+#tikz_save('/home/juan/Documents/Publicaciones/2025_euromech/flag_shear/article/tikzs/bistability_full.tikz')

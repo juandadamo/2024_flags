@@ -1,0 +1,66 @@
+% This file was created with tikzplotlib v0.10.1.
+\begin{tikzpicture}
+	
+	\definecolor{darkgray176}{RGB}{176,176,176}
+	\definecolor{steelblue31119180}{RGB}{31,119,180}
+	
+	\begin{axis}[
+		tick align=outside,
+		tick pos=left,
+		x grid style={darkgray176},
+		xlabel={$m^* = \rho_f L / \rho_s e$},
+		xmin=0, xmax=4,
+		xtick style={color=black},
+		xtick={0,0.5,1,1.5,2,2.5,3,3.5,4},
+		xticklabels={
+			$\mathdefault{0.0}$,
+			$\mathdefault{0.5}$,
+			$\mathdefault{1.0}$,
+			$\mathdefault{1.5}$,
+			$\mathdefault{2.0}$,
+			$\mathdefault{2.5}$,
+			$\mathdefault{3.0}$,
+			$\mathdefault{3.5}$,
+			$\mathdefault{4.0}$
+		},
+		y grid style={darkgray176},
+		ylabel={$u^*_{\rm{offset}}=u_{\rm{offset}} L\sqrt{\rho_s e/B}$},
+		ymin=0, ymax=30,
+		ytick style={color=black},
+		ytick={0,5,10,15,20,25,30},
+		yticklabels={
+			$\mathdefault{0}$,
+			$\mathdefault{5}$,
+			$\mathdefault{10}$,
+			$\mathdefault{15}$,
+			$\mathdefault{20}$,
+			$\mathdefault{25}$,
+			$\mathdefault{30}$
+		}
+		]
+		
+		% Imagen de fondo (la que quieres contrastar)
+		\addplot graphics [xmin=0, xmax=4, ymin=0, ymax=30] {instability_1-001.png};
+		
+		% Tus datos para contrastar
+		\addplot [semithick, steelblue31119180, mark=square, mark size=3, mark options={solid,fill opacity=0}, only marks]
+		table {%
+			0.8166 11.6272340359301
+			0.88465 11.1865910100379
+			0.9527 10.8453413889604
+			1.02075 11.620008631029
+			1.0888 11.7441008597655
+			1.15685 11.8636752064649
+			1.2249 12.1549290705715
+			1.29295 11.8001258033829
+			1.361 12.2404697747113
+			1.4971 12.8681563232947
+			1.6332 12.086263676325
+			1.7693 11.5664081875031
+			1.9054 11.6971277120132
+			2.0415 12.5326368342999
+			2.1776 12.6452848306619
+		};
+		
+	\end{axis}
+\end{tikzpicture}

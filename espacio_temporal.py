@@ -7,7 +7,7 @@ caso = 'full_freq_13.4'
 
 lista_casos = np.sort(glob.glob('data_out/'+'*.npz'))
 
-for caso in lista_casos:
+for caso in lista_casos[2:3]:
     A = np.load(caso)
 
     Imagen_sum = A['Imagen_sum']

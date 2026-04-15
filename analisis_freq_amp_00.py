@@ -26,10 +26,10 @@ from skimage.segmentation import clear_border
 if socket.gethostname() == 'CNRS304952':
     dirw = 'C:/Users/IRL2027 2/Documents/Juan/GitHub/2024_flags/figures/'
 else:
-    dirw = '/home/juan/Documents/Publicaciones/2025_euromech/flag/article/figures/'
-dirw = 'figures/'
+    dirw = '/home/juan/Documents/Publicaciones/2026_shear_flutter/figures/'
+# dirw = 'figures/'
 plt.close('all')
-
+plt.close('all')
 # Opcional: Forzar la recolección de basura (gc) para liberar memoria
 import gc
 gc.collect()
@@ -85,7 +85,7 @@ elif caso == 'triang':
     frec_c = 13
 
 
-lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*'))
+lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*.npz'))
 
 lista_caso_2d = np.delete(lista_caso_2d,[2,7,8])
  
@@ -163,17 +163,19 @@ fun_Amplitud = np.poly1d(p1)
 
 
 
+UB = 1/L * (Papel_80.B/Papel_80.rho/Papel_80.thickness)**.5
 
+sigma = rhoa_b*L/(rho_papel*Papel_80.thickness)
 # Contenido en frecuencia de la señal!!!!!!!
 
 fig4,ax4 = plt.subplots()
 deltaw = delta_turb(x_carac,Velocidad,nu)
-ax4.plot(Velocidad, Frecuencia*deltaw/Velocidad_m, 'ks', fillstyle='none')
+ax4.plot(Velocidad/UB/2, Frecuencia*Lbandera*1e-3/Velocidad_m, 'ks', fillstyle='none')
 ax4.grid()
-ax4.set_ylim([0.045, 0.065])
-ax4.set_ylabel(r'$f_{foil}\delta_w/U$')
+#ax4.set_ylim([0.045, 0.065])
+ax4.set_ylabel(r'$f_{foil}L/U$')
 # ax4.set_xlabel(r'$\sqrt{U-U_c}$ [m/s$^{1/2}$]')
-ax4.set_xlabel(r'$U$ [m/s]')
+ax4.set_xlabel(r'$u^*$')
 # ax4.set_xlim([0,2.5])
 fig4.tight_layout()
 fig4.savefig(dirw+'Freq_adim_V'+caso+'.png',dpi=300, bbox_inches='tight')

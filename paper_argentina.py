@@ -82,7 +82,10 @@ def sistema_completo(s, xi, omega, u0, rho):
     return res
 
 
-
+def F(omega):
+    xi = xi_guess
+    res = sistema_completo(s, xi, omega, u0, rho)
+    return np.linalg.norm(res)
 
 from scipy.optimize import root
 
@@ -100,14 +103,9 @@ u0_crit = []
 for rho in rho_vals:
     found = False
     for u0 in u0_vals:
-        # Supón que la inestabilidad ocurre para omega real (crecimiento marginal)
-        omega_guess = 10.0  # Valor inicial, puedes ajustar
+        #  la inestabilidad ocurre para omega real (crecimiento marginal)
+        omega_guess = 10.0  # Valor inicial,
         xi_guess = np.sin(np.pi * s)  # Modo inicial aproximado
-
-        def F(omega):
-            xi = xi_guess
-            res = sistema_completo(s, xi, omega, u0, rho)
-            return np.linalg.norm(res)
 
         sol = root(F, omega_guess)
         omega_sol = sol.x[0]
