@@ -140,7 +140,7 @@ for ii,i in enumerate(range(0,nfinal,nstep)):
     ax2.plot(X[0][n1:n2]*1.06/1/Lbandera,(YT[i][n1:n2]-nyorigin)/escalax/Lbandera,color='k',
              linestyle='-',linewidth=2)
 
-s = 100 #modos retenidos
+s = 2 #modos retenidos
 YT_r = np.dot(U[:,:s],np.dot(Vh[:s].T,np.diag(S[:s])).T)
 
 fig3,ax3 = plt.subplots(figsize=(5*1.2,5))
@@ -288,6 +288,7 @@ ax9.grid('gray',which='both')
 ax9.set_xlabel('frequency')
 ax9.set_ylabel('PSD')
 ax9.plot([12,12],[1e-3,30.5],linestyle='dashed',color='k')
+ax9.tic
 fig9.tight_layout()
 # tikz_save(dirout2+'modes_fourier_pod.tikz')
 fig9.savefig(dirout+'modes_fourier_pod.pdf')
