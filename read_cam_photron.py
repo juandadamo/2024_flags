@@ -6,12 +6,13 @@ import glob
 from matplotlib import rcParams
 from funciones_flag import *
 import tifffile as tif
+from skimage import filters, measure
 
 
 plt.close('all')
 dir_w = '/home/juan/data/full/41_0_full/'
 file_list = np.sort(glob.glob(dir_w+'/*.tif'))
-nfile = 1845
+# nfile = 1845
 
 ntime_1 = 500
 
@@ -28,8 +29,12 @@ for i,filei in enumerate(file_list[:ntime_1]):
         Asum += A
     A_total[i] = A.reshape(1,m*n)
 
-U1, s, V= np.linalg.svd(A_total, full_matrices=False)
-
+Amedia = Asum/ntime_1
+U1, s, V= np.linalg.svd(A_total-Amedia.reshape((1,m*n)), full_matrices=False)
+k = 10
+U1 = U1[:,:k]
+V = V[:k]
+s = s[:k]
 fig,ax = plt.subplots(1,2)
 ax0,ax1 = ax
 ax0.imshow(A)
@@ -41,3 +46,6 @@ ax2 = ax2.flatten()
 for i,ax2i in enumerate(ax2):
     ax2i.imshow(V[i].reshape(m,n))
 
+dirout = 'full_uniform/'
+dictsal = {'U1':U1,'s':s,'V':V,'Amedia':Amedia}
+np.savez(dirout+'full_41.npz',**dictsal)
