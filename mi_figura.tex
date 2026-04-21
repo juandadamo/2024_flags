@@ -1,0 +1,97 @@
+% This file was created with tikzplotlib v0.10.1.
+\begin{tikzpicture}
+
+\definecolor{darkgray176}{RGB}{176,176,176}
+\definecolor{darkorange25512714}{RGB}{255,127,14}
+\definecolor{steelblue31119180}{RGB}{31,119,180}
+
+\begin{axis}[
+log basis y={10},
+tick align=outside,
+tick pos=left,
+x grid style={darkgray176},
+xmajorgrids,
+xmin=0, xmax=20,
+xminorgrids,
+xtick style={color=black},
+xtick={0,2.5,5,7.5,10,12.5,15,17.5,20},
+xticklabels={
+  $\mathdefault{0.0}$,
+  $\mathdefault{2.5}$,
+  $\mathdefault{5.0}$,
+  $\mathdefault{7.5}$,
+  $\mathdefault{10.0}$,
+  $\mathdefault{12.5}$,
+  $\mathdefault{15.0}$,
+  $\mathdefault{17.5}$,
+  $\mathdefault{20.0}$
+},
+y grid style={darkgray176},
+ymajorgrids,
+ymin=11.2841677603979, ymax=788793.919582862,
+yminorgrids,
+ymode=log,
+ytick style={color=black},
+ytick={1,10,100,1000,10000,100000,1000000,10000000},
+yticklabels={
+  $\mathdefault{10^{0}}$,
+  $\mathdefault{10^{1}}$,
+  $\mathdefault{10^{2}}$,
+  $\mathdefault{10^{3}}$,
+  $\mathdefault{10^{4}}$,
+  $\mathdefault{10^{5}}$,
+  $\mathdefault{10^{6}}$,
+  $\mathdefault{10^{7}}$
+}
+]
+\addplot [semithick, steelblue31119180, mark=o, mark size=3, mark options={solid,fill opacity=0}, only marks]
+table {%
+0 53190.7109375
+1 21426.59375
+2 2854.80004882812
+3 959.318176269531
+4 552.495361328125
+5 363.648712158203
+6 208.751754760742
+7 141.070053100586
+8 83.3840026855469
+9 56.3457336425781
+10 43.3510856628418
+11 35.405216217041
+12 30.9717903137207
+13 30.1680679321289
+14 28.6891174316406
+15 28.0763511657715
+16 27.454439163208
+17 26.3109893798828
+18 25.5740623474121
+19 24.9618835449219
+20 24.2256507873535
+};
+\addplot [semithick, darkorange25512714, mark=square, mark size=3, mark options={solid,fill opacity=0}, only marks]
+table {%
+0 475072.3125
+1 35791.359375
+2 17728.6953125
+3 1955.45617675781
+4 846.266540527344
+5 407.411041259766
+6 226.305358886719
+7 141.821395874023
+8 84.0064239501953
+9 56.4473304748535
+10 43.359058380127
+11 35.4497566223145
+12 31.0134677886963
+13 30.210147857666
+14 28.764799118042
+15 28.0803737640381
+16 27.4623546600342
+17 26.3365020751953
+18 25.5744972229004
+19 24.9619522094727
+20 24.27490234375
+};
+\end{axis}
+
+\end{tikzpicture}
