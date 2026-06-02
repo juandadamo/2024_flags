@@ -96,17 +96,17 @@ for j, filej in enumerate(lista_caso_2d[:]):
         ax0.imshow(Asum)
         for YT_k in YT[100:150:10]:
             ax0.plot(YT_k,marker='o',color='tab:orange',markersize=0.5,linestyle='none')
-        fig0.savefig(dirw+'image_sum_'+caso+'.png')
+        # fig0.savefig(dirw+'image_sum_'+caso+'.png')
         #fig1,ax1 = plt.subplots()
         #ax1.imshow(label_image)
         # ax0.plot(coord_amp[:,1],coord_amp[:,0],marker='o',fillstyle='none',linestyle='none',markersize=0.1,color='tab:orange')
-        fig0.savefig(dirw+'image_label_'+caso+'.png')
+        # fig0.savefig(dirw+'image_label_'+caso+'.png')
         ax0.plot([1,len(YT.T)],[lim_superior,lim_superior],color='w',linewidth=3)
         ax0.plot([1,len(YT.T)],[lim_inferior,lim_inferior],color='w',linewidth=3)
-        fig0.savefig(dirw+'image_label_amp_'+caso+'.png')
+        # fig0.savefig(dirw+'image_label_amp_'+caso+'.png')
 fig,ax = plt.subplots()
 #Uc = Velocidad[0]
-
+Amplitud_px = np.copy(Amplitud)
 Amplitud = Amplitud/Lbandera  # Normalizar por la longitud de la bandera
 Uc = veloc_tunel_ib(frec_c)
 U = Velocidad - Uc
@@ -118,7 +118,7 @@ ax.set_ylim([0,0.8])
 ax.set_yticks(np.arange(0, 0.9, 0.1))
 fig.tight_layout()
 
-fig.savefig(dirw+'Amplitudes_'+caso+'.png')
+# fig.savefig(dirw+'Amplitudes_'+caso+'.png')
  
 
 p1 = np.polyfit(U[:npoints]**.5, Amplitud [:npoints],1)
@@ -139,4 +139,4 @@ ax3.grid()
 ax3.set_ylim([0,0.8])
 ax3.set_yticks(np.arange(0, 0.9, 0.1))
 fig3.tight_layout()
-fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png')
+# fig3.savefig(dirw+'Amplitudes_'+caso+'_ajuste.png')

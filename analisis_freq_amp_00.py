@@ -142,11 +142,11 @@ for j, filej in enumerate(lista_caso_2d[:]):
     plt.plot(freq_YT[peak_freqs], FYT[peak_freqs], 'ro')
     plt.xlim([0, 100])
     plt.tight_layout()
-    plt.savefig(dirw+'Fourier_YT_'+caso+'_'+str(j)+'.png')
+    # plt.savefig(dirw+'Fourier_YT_'+caso+'_'+str(j)+'.png')
 
     plt.subplots()
     plt.contourf(YT.T, cmap='binary',levels=20)
-    plt.savefig(dirw+'SpatioT_YT_'+caso+'_'+str(j)+'.png')
+    # plt.savefig(dirw+'SpatioT_YT_'+caso+'_'+str(j)+'.png')
 
 plt.close('All')
  
@@ -178,7 +178,7 @@ ax4.set_ylabel(r'$f_{foil}L/U$')
 ax4.set_xlabel(r'$u^*$')
 # ax4.set_xlim([0,2.5])
 fig4.tight_layout()
-fig4.savefig(dirw+'Freq_adim_V'+caso+'.png',dpi=300, bbox_inches='tight')
+# fig4.savefig(dirw+'Freq_adim_V'+caso+'.png',dpi=300, bbox_inches='tight')
 
 
 
@@ -206,4 +206,4 @@ ax7.set_ylim([9,26])
 ax7.set_xlim([6,15])
 # ax7.set_yticks(np.arange(0, 0.9, 0.1))    
 fig7.tight_layout()
-fig7.savefig(dirw+'Freq_Veloc_'+caso+'.png',dpi=300, bbox_inches='tight')
+# fig7.savefig(dirw+'Freq_Veloc_'+caso+'.png',dpi=300, bbox_inches='tight')

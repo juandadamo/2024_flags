@@ -86,7 +86,7 @@ elif caso == 'triang':
     frec_c = 11.4
 
 
-lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*'))
+lista_caso_2d = np.sort(glob.glob('data_out/'+caso+'_freq*.npz'))
 
  
 Velocidad, Amplitud, Frecuencia = np.zeros((3,len(lista_caso_2d)))
@@ -130,7 +130,7 @@ for j, filej in enumerate(lista_caso_2d[:]):
     plt.plot(freq_YT[peak_freqs], FYT[peak_freqs], 'ro')
     plt.xlim([0, 100])
     plt.tight_layout()
-    plt.savefig(dirw+'Fourier_YT_'+caso+'_'+str(j)+'.png')
+    # plt.savefig(dirw+'Fourier_YT_'+caso+'_'+str(j)+'.png')
 
 plt.close('All')
  
@@ -151,7 +151,7 @@ ax4.grid()
 ax4.set_ylabel(r'$f_{foil}\delta_w/U$')
 ax4.set_xlabel(r'$\sqrt{U-U_c}$')
 fig4.tight_layout()
-fig4.savefig(dirw+'Freq_sqrt_V'+caso+'.png')
+# fig4.savefig(dirw+'Freq_sqrt_V'+caso+'.png')
 
 
 
@@ -165,7 +165,7 @@ ax6.set_xlabel(r'$f_{foil}\delta_w/U$')
 ax6.set_ylim([0,0.8])
 ax6.set_yticks(np.arange(0, 0.9, 0.1))    
 fig6.tight_layout()
-fig6.savefig(dirw+'Freq_Amp'+caso+'.png')
+# fig6.savefig(dirw+'Freq_Amp'+caso+'.png')
 
 ((Papel_80.E*Papel_80.thickness**3) / (rhoa*Papel_80.L**3))**0.5
 
@@ -179,7 +179,7 @@ ax7.set_ylim([9,26])
 ax7.set_xlim([6,15])
 # ax7.set_yticks(np.arange(0, 0.9, 0.1))    
 fig7.tight_layout()
-fig7.savefig(dirw+'Freq_Veloc_'+caso+'.png')
+# fig7.savefig(dirw+'Freq_Veloc_'+caso+'.png')
 
 
 Cauchy =  (rhoa*Papel_80.L**3*Velocidad**2) / (Papel_80.E*Papel_80.thickness**3)

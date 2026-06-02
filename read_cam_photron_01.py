@@ -10,14 +10,14 @@ from skimage import filters, measure
 
 
 plt.close('all')
-dir_w = '/home/juan/data/full/41_0_full/'
+dir_w = '/home/juan/data/full/41_5_full_highlighter_green/'
 file_list = np.sort(glob.glob(dir_w+'/*.tif'))
 # nfile = 1845
-
+index_rand = np.random.randint(1,len(file_list),len(file_list))
 ntime_1 = len(file_list)
-# ntime_1 = 10
+ntime_1 = 100
 
-for i,filei in enumerate(file_list[:ntime_1]):
+for i,filei in enumerate(file_list[index_rand][:ntime_1]):
     A = tif.imread(filei)
     if i ==0:
         m,n = A.shape
@@ -36,9 +36,9 @@ for i,filei in enumerate(file_list[:ntime_1]):
             centroide_columna[j] = np.nan  # sin bandera en esa columna
 
     Y_total[i] = centroide_columna
-    if i % 100 == 0:
+    if i % 10 == 0:
         print(f'Procesada imagen {i}/{ntime_1}')
-
+raise ValueError()
 file_out = 'full_uniform/velocidad_41.npz'
 dictsal = {'YT':Y_total}
 np.savez(file_out,**dictsal)
@@ -48,7 +48,7 @@ np.savez(file_out,**dictsal)
 # Centrar los datos
 # Y_mean = np.mean(Y_total, axis=0)
 # Y_centered = Y_total - Y_mean
-#
+Y_total[np.isnan[Y_total]] =
 # # SVD
 # U, s, Vt = np.linalg.svd(Y_centered, full_matrices=False)
 #
