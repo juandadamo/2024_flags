@@ -67,8 +67,8 @@ Asum_eq = exposure.equalize_adapthist(Asum_normalized, clip_limit=0.03)
 # cm0b = ax0.imshow(Asum_eq, cmap='gist_gray_r',
 #                   extent=(xmin, xmax/1, ymin, ymax),
 #                   origin='lower', vmin=0.075, vmax=1,alpha=1)
-ax0.set_xlabel('$x$ (mm)')
-ax0.set_ylabel('$y$ (mm)')
+ax0.set_xlabel(r'$x~ [\mathrm{mm}]$')
+ax0.set_ylabel(r'$y~ [\mathrm{mm}]$')
 
 # ax0.set_ylim([-50,50])
 # ax0.set_aspect('equal')
@@ -102,10 +102,10 @@ for ii,i in enumerate(range(50,999,100)):
 X,T = np.meshgrid(np.arange(xmin, xmax, (xmax-xmin)/Asum.shape[1]),
                   np.arange(tmin, tmax, dt))
 cm1 = ax1.contourf(T,X/1*1.06,(YT-nyorigin)/escalax/1/Lbandera, cmap='viridis',levels=20)
-ax1.set_xlabel('$t$ (s)' )
-ax1.set_ylabel('$x$ (mm)' )
+ax1.set_xlabel(r'$\mathrm{time~[s]}$' )
+ax1.set_ylabel(r'$x~ [\mathrm{mm}]$' )
 cbar1 = plt.colorbar(cm1, ax=ax1, label='$y/L$')
-cbar1.set_label('$y/L$')
+cbar1.set_label(r'$y/L$')
 cbar1.ax.tick_params(labelsize=14)
 # cbar1.set_label('$y/L$', rotation=0, labelpad=15)
 # cbar1.set_label('$y/L$', rotation=0, labelpad=15, ha='left')
@@ -116,7 +116,7 @@ ax0.grid()
 
 
 
-# fig0.savefig(dirout+'ref_image_sum_full.png', dpi=300, bbox_inches='tight')
+fig0.savefig(dirout+'ref_image_sum_full.pdf', dpi=150, bbox_inches='tight')
 fig1.savefig(dirout+'spatio_temporal.pdf',dpi=150, bbox_inches='tight')
 
 
@@ -200,6 +200,7 @@ ax5.plot([Frecuencia,Frecuencia] , [y1,FYT[frec_YT>2][peak_freqs][0]], 'r', line
 # axb.set_xticks([*axb.get_xticks(), Frecuencia])  # Agrega posición
 ax5.set_xlim([0,100])
 xticks1 = ax5.get_xticks()
+xticks1 = np.arange(0,125,25)
 ax5.set_xticks(np.append(xticks1, Frecuencia))  # Agrega posición
 ax5.set_xticklabels([f"{tick:.0f}" for tick in ax5.get_xticks()])  # Formatea etiquetas
 
@@ -208,8 +209,10 @@ for axi in [ax4,ax5]:
     axi.set_xlim([0,100])
     axi.set_ylim([5.5e5,1e8])
     axi.grid()
-    axi.set_xlabel('Frequency (Hz)')
-    axi.set_ylabel('PSD')
+    #axi.set_xlabel('Frequency (Hz)')
+    axi.set_xlabel(r'$\mathrm{Frequency}~ [\mathrm{Hz}]$')
+    # axi.set_ylabel('PSD')
+    axi.set_ylabel(r'$\mathrm{PSD\ [(m/s)^2/Hz]}$')
 # fig4.tight_layout()
 
 fig5.savefig('/home/juan/Documents/Publicaciones/2026_shear_flutter/figures/Fourier_YT_full.pdf',dpi=150, bbox_inches='tight')
@@ -218,13 +221,13 @@ energia_acum = np.cumsum(energia) * 100  # porcentaje
 fig6,ax6 = plt.subplots(figsize=(6.75,6))
 ax6.semilogy(S[:10],marker='o',fillstyle='none',linestyle='none',markersize=10)
 ax6.grid(color='gray',linestyle='dotted',which='both')
-ax6.set_ylabel(r'eigenvalues $\lambda$')
-ax6.set_xlabel('mode number')
+ax6.set_ylabel(r'$\mathrm{eigenvalues~} \lambda$')
+ax6.set_xlabel(r'$\mathrm{mode~ number}$')
 
 ax6b = ax6.twinx()
 ax6b.plot(energia_acum[:10], marker='s', fillstyle='none', linestyle='--',
-          color='k', markersize=8, label='Cumulative energy')
-ax6b.set_ylabel('cumulative energy (\%)')
+          color='k', markersize=8, label=r'$\mathrm{Cumulative~ energy}$')
+ax6b.set_ylabel(r'$\mathrm{cumulative~ energy}~ (\%)$')
 ax6b.tick_params(axis='y', labelcolor='k')
 ax6b.set_ylim(0, 110)
 
@@ -238,8 +241,8 @@ t_s = np.arange(0,Nsnapshots/fsampling,1/fsampling)
 scale_mod = Vh[0].max()/escalax/Lbandera
 scale_mod_1 = 1/escalax/Lbandera
 scale_mod_2 = 1/escalax/Lbandera
-ax7.plot(t_s,U[:,0]*S[0]*scale_mod_1,label='mode 1')
-ax7.plot(t_s,U[:,1]*S[1]*scale_mod_2,label='mode 2',linestyle='dashed')
+ax7.plot(t_s,U[:,0]*S[0]*scale_mod_1,label=r'$\mathrm{mode~ 1}$')
+ax7.plot(t_s,U[:,1]*S[1]*scale_mod_2,label=r'$\mathrm{mode~ 2}$',linestyle='dashed')
 
 s=2
 YT_r = np.dot(U[:,:s],np.dot(Vh[:s].T,np.diag(S[:s])).T)
@@ -248,8 +251,8 @@ YT_r = np.dot(U[:,:s],np.dot(Vh[:s].T,np.diag(S[:s])).T)
 # ax7.plot((YT[:,980]-YT.mean(0)[980])/escalax/Lbandera)
 ax7.grid(color='gray',linestyle='dotted',which='both')
 ax7.legend(ncols=2,fontsize=12)
-ax7.set_ylabel(r'Amplitude')
-ax7.set_xlabel('time [s]')
+ax7.set_ylabel(r'$\mathrm{Amplitude}$')
+ax7.set_xlabel(r'$\mathrm{time~} [\mathrm{s}]$')
 fig7.tight_layout()
 tikz_save(dirout2+'modes_t_pod.tikz')
 fig7.savefig(dirout+'modes_t_pod.pdf',dpi=150, bbox_inches='tight')
@@ -259,16 +262,16 @@ fig8,ax8 = plt.subplots(figsize=(6.75,5.5))
 amp_0 = U[:,0].max()*S[0]/escalax/Lbandera*(-2)
 amp_1 = U[:,1].max()*S[1]/escalax/Lbandera*(-2)
 xn = X[0][n1:n2]*1.06/1/Lbandera
-ax8.plot(xn,Vh[0]*amp_0 ,label='pod mode 1')
-ax8.plot(xn,amp_1*Vh[1],label='pod mode 2',linestyle='dashed')
+ax8.plot(xn,Vh[0]*amp_0 ,label=r'$\mathrm{pod~ mode~ 1}$')
+ax8.plot(xn,amp_1*Vh[1],label=r'$\mathrm{pod~ mode~ 2}$',linestyle='dashed')
 # ax8.plot(S[2]*Vh[2]/escalax/Lbandera,label='mode 2',linestyle='dashdot')
 x_s = np.linspace(0,1,200)
 n_s = np.linspace(0,1000,200)
 
 a_1 = w_n (BnL[0],x_s,A1=amp_0*0.5*Vh[0].max(),L=1)
 a_2 = w_n (BnL[1],x_s,A1=amp_1*Vh[1].max(),L=1)
-ax8.plot(x_s,a_1,linestyle='dotted',label='cantilever mode 1')
-ax8.plot(x_s,a_2,linestyle='dashdot',label='cantilever mode 2')
+ax8.plot(x_s,a_1,linestyle='dotted',label=r'$\mathrm{cantilever~ mode~ 1}$')
+ax8.plot(x_s,a_2,linestyle='dashdot',label=r'$\mathrm{cantilever~ mode~ 2}$')
 ax8.legend(fontsize=12)
 
 
@@ -307,15 +310,15 @@ magnitud1 = np.abs(FU1[:len(U1)//2])
 magnitud_s = np.abs(FS[:len(FS)//2])
 frecs_pos = frecuencias[:len(U)//2]
 fig9,ax9 = plt.subplots(figsize=(6.75,5.5))
-ax9.semilogy(frecs_pos, magnitud,label = 'mode 1')
-ax9.semilogy(frecs_pos, magnitud1,label = 'mode 2')
-ax9.semilogy(frecs_pos, magnitud_s,label = 'full signal')
+ax9.semilogy(frecs_pos, magnitud,label = r'$\mathrm{mode~ 1}$')
+ax9.semilogy(frecs_pos, magnitud1,label = r'$\mathrm{mode~ 2}$')
+ax9.semilogy(frecs_pos, magnitud_s,label = r'$\mathrm{full~ signal}$')
 ax9.set_xlim([0,100])
 ax9.set_ylim(bottom=1e-3)
 ax9.legend(fontsize=12)
 ax9.grid('gray',which='both')
-ax9.set_xlabel('frequency')
-ax9.set_ylabel('PSD')
+ax9.set_xlabel(r'$\mathrm{Frequency}~ [\mathrm{Hz}]$')
+ax9.set_ylabel(r'$\mathrm{PSD\ [(m/s)^2/Hz]}$')
 ax9.plot([12,12],[1e-3,30.5],linestyle='dashed',color='k')
 
 # fig9.tight_layout()

@@ -22,6 +22,9 @@ rhoa_b = 1.0888  #densidad aire de bariloche
 nu = 1.5e-5*rhoa_b / rhoa
 
 plt.close('all')
+
+
+fig0,ax0 = plt.subplots(1,2,figsize=(14,5.5))
 IM = plt.imread('raynaud_mulleners.png')
 
 # fig,ax = plt.subplots(figsize=(8,8))
@@ -33,7 +36,7 @@ ax = fig.get_axes()[0]
 data_uoffset = pd.read_csv('datos_flutter_ustop_f.csv',decimal=',')
 data_uonset = pd.read_csv('datos_flutter_uonset.csv',decimal=',')
 
-
+ax0[0] = ax
 
 Uoffset = data_uoffset['Ustop']/2
 Uonset = data_uonset['Uonset']/2

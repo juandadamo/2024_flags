@@ -243,9 +243,10 @@ Velocidad_rect, Amplitud_rect, Frecuencia_rect = lee_datos_foil(lista_caso_2d,Ve
 Amplitud_rect = Amplitud_rect/Lbandera
 Amplitud_triang = Amplitud_triang/Lbandera
 
-
-fig1, ax1 = plt.subplots(figsize=(6.75,5.5))
-fig2, ax2 = plt.subplots(figsize=(6.75,5.5))
+fig,ax = plt.subplots(1,2,figsize=(13,5))
+ax1,ax2 = ax
+# fig1, ax1 = plt.subplots(figsize=(6.75,5.5))
+# fig2, ax2 = plt.subplots(figsize=(6.75,5.5))
 lin1, = ax1.plot(Velocidad_full/2/UB,Amplitud_full/2,'o',fillstyle='none',markersize=10,markeredgewidth=2,zorder=10)
 lin2, = ax1.plot(Velocidad_triang/2/UB,Amplitud_triang/2,'^',fillstyle='none',markersize=10,markeredgewidth=2,zorder=10)
 lin3, = ax1.plot(Velocidad_rect/2/UB,Amplitud_rect/2,'s',fillstyle='none',markersize=10,markeredgewidth=2,zorder=10)
@@ -287,8 +288,8 @@ for i in np.arange(len(f_offset)):
     elif i==2:
             ax1.annotate("",xytext=(u_onset [i]/2/UB,0 ),xy=(u_onset[i]/2/UB ,0.25), arrowprops=dict(arrowstyle="->", lw=3.5, mutation_scale=20,shrinkA=5,color=color_i[i]),color=color_i[i],zorder=-1)
 
-fig1.savefig(dirw+'amplitudes_all.pdf',dpi=300, bbox_inches='tight')
-fig2.savefig(dirw+'frecs_all.pdf',dpi=300, bbox_inches='tight')
+fig.savefig(dirw+'amplitudes_frecs_all.pdf',dpi=300, bbox_inches='tight')
+#fig2.savefig(dirw+'frecs_all.pdf',dpi=300, bbox_inches='tight')
 
 fig3,ax3 = plt.subplots()
 
@@ -326,6 +327,6 @@ lin1, = ax1.plot(u_aserrada/2/UB,dx_aserrada/Lbandera/2,'^',linestyle='none')
 lin2, = ax1.plot(u_almenada/2/UB,dx_almenada/Lbandera/2,'s',linestyle='none')
 lin3, = ax1.plot(u_almenada_old/2/UB,dx_almenada_old/Lbandera/2,'s',linestyle='none',fillstyle='none',color=lin2.get_color())
 
-fig1.savefig(dirw+'amplitudes_all_v2.pdf',dpi=300, bbox_inches='tight')
-
+# fig1.savefig(dirw+'amplitudes_all_v2.pdf',dpi=300, bbox_inches='tight')
+fig.savefig(dirw+'amplitudes_frecs_all_v2.pdf',dpi=300, bbox_inches='tight')
 
