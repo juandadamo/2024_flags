@@ -16,7 +16,7 @@ dirout = '/home/juan/Documents/Publicaciones/2026_shear_flutter/figures/'
 dirout2 = '/home/juan/Documents/Publicaciones/2026_shear_flutter/tikzs/'
 
 # --- CONFIGURACIÓN ESTILÍSTICA DE PLOTS (PAPER) ---
-nfont = 20
+nfont = 30
 plt.rcParams.update({
     "text.usetex": True,
     "font.family": "serif",
@@ -61,7 +61,7 @@ s = 12
 YT_r = np.dot(U[:, :s], np.dot(Vh[:s].T, np.diag(S[:s])).T) + YT.mean(0)[n1:n2]
 
 # --- INICIALIZACIÓN DE LA FIGURA ---
-fig, ax0 = plt.subplots(1, 1, figsize=(6.5, 5), layout='constrained')
+fig, ax0 = plt.subplots(1, 1, figsize=(6.5, 6.5), layout='constrained')
 
 ax0.set_xlabel(r'$x~ [\mathrm{mm}]$')
 ax0.set_ylabel(r'$y~ [\mathrm{mm}]$')
@@ -74,7 +74,7 @@ T_flap = 1/12
 dt = 0.001 / T_flap * 2 * np.pi
 
 i0 = 50
-paso_i = 10
+paso_i = 16
 indices_efectivos = np.array([i for i in range(i0, 1000) if (i < i0 + 90) and (i % paso_i == 0)])
 N = len(indices_efectivos)
 
@@ -111,14 +111,28 @@ ax0.plot(np.ravel(x_gris_total), np.ravel(y_gris_total), marker='.', color='ligh
          markersize=.1, linestyle='none', zorder=0,rasterized=True)
 
 # --- GENERACIÓN DEL COLORBAR ---
-sm = plt.cm.ScalarMappable(cmap=cmap_discreto)
-sm.set_clim(-0.5, N - 0.5)
+tiempos_en_pi = ((indices_efectivos - i0) * dt) / np.pi
+
+# Seteo de parches de color discretos rodeando simétricamente cada tick
+step = tiempos_en_pi[1] - tiempos_en_pi[0]
+boundaries = np.linspace(tiempos_en_pi[0] - step/2, tiempos_en_pi[-1] + step/2, N + 1)
+
+norm = mcolors.BoundaryNorm(boundaries, cmap_discreto.N)
+sm = plt.cm.ScalarMappable(cmap=cmap_discreto, norm=norm)
 sm.set_array([])
 
-cbar = fig.colorbar(sm, ax=ax0, ticks=np.arange(N))
-cbar_labels = [r'$' + f'{t:.2f}' + r'\pi$' for t in tiempos_en_pi]
-cbar.ax.set_yticklabels(cbar_labels)
-cbar.ax.set_title(r'$\mathrm{phase}$', fontsize=nfont - 2, pad=10)
+cbar = fig.colorbar(
+    sm,
+    ax=ax0,
+    ticks=tiempos_en_pi,
+    location='top',
+    spacing='proportional',
+    pad=0.03,
+)
+
+cbar_labels = [rf'${t:.2f}\pi$' for t in tiempos_en_pi]
+cbar.set_ticklabels(cbar_labels)
+cbar.ax.set_title(r'$\mathrm{phase}$', fontsize=nfont - 2, pad=6)
 
 
 # --- COTA DE AMPLITUD (A) ---

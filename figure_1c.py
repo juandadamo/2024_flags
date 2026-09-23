@@ -98,7 +98,7 @@ for i in range(50, 1000, 1):
              markersize=.1, linestyle='none', alpha=0.5, zorder=0)
 
     # Curvas de color seleccionadas
-    if i < i0 + 90:  # Ajustado al límite exacto de tus curvas deseadas
+    if i < i0 + 90:  # Ajustado al límite exacto de las curvas
         xdata = X[0] * 1.06 / 1
         ydata = (YT[i] - nyorigin) / escalax
         if i % paso_i == 0:
@@ -110,12 +110,18 @@ for i in range(50, 1000, 1):
 sm = plt.cm.ScalarMappable(cmap=cmap_discreto, norm=norm)
 sm.set_array([])
 
-cbar = fig.colorbar(sm, ax=ax0, ticks=tiempos_en_pi, spacing='proportional')
+cbar = fig.colorbar(
+    sm,
+    ax=ax0,
+    ticks=tiempos_en_pi,
+    location='top',
+    spacing='proportional',
+    pad=0.13,
+)
 
-# Formateo fino con estilo matemático \mathrm para el paper
-cbar_labels = [r'$' + f'{t:.2f}' + r'\pi$' for t in tiempos_en_pi]
-cbar.ax.set_yticklabels(cbar_labels)
-cbar.ax.set_title(r'$\mathrm{phase}$', fontsize=nfont - 2, pad=10)
+cbar_labels = [rf'${t:.2f}\pi$' for t in tiempos_en_pi]
+cbar.set_ticklabels(cbar_labels)
+cbar.ax.set_title(r'$\mathrm{phase}$', fontsize=nfont - 2, pad=6)
 
 # --- GUARDADO EN ALTA CALIDAD ---
 

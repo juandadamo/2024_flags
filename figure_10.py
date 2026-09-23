@@ -55,7 +55,7 @@ delta_cl = 18e-3 # espesor de capa limite para velocidad 12m/s
 #longitud caracteristica de la placa plana (tunel) en base a la medicion en Balseiro
 x_carac = longitud_equivalente_capa_limite_turbulenta(delta_cl,Uinf,nu)
 U = 12
-delta_U12 = delta_turb(x_carac,U,nu)
+delta_U12 = delta_turb2(x_carac,U,nu)
 
 
 
@@ -107,13 +107,7 @@ plt.close('All')
  
 gc.collect()
  
-#
-# Amplitud_full = Amplitud_full/Lbandera
-# Uc = veloc_tunel_ib(frec_c)
-# U = Velocidad_full - Uc
-# Velocidad_m = Velocidad_full/2
-# p1 = np.polyfit(U[:npoints]**.5, Amplitud_full[:npoints]/2,1)
-# fun_Amplitud = np.poly1d(p1)
+
 
 
 
@@ -122,11 +116,11 @@ UB = 1/L * (Papel_80.B/Papel_80.rho/Papel_80.thickness)**.5
 
 sigma = rhoa_b*L/(rho_papel*Papel_80.thickness)
 # Contenido en frecuencia de la señal!!!!!!!
-
+fig,ax = plt.subplots(1,2,figsize=(13,5))
 figb,axb = plt.subplots(1,2,figsize=(13,5))
 ax0b,ax1b = axb
 
-fig,ax = plt.subplots(1,2,figsize=(13,5))
+
 ax0,ax1 = ax
 # ax3.plot(Velocidad_full/2/UB,Frecuencia_full ,'o',fillstyle='none',markersize=10)
 # ax3.plot(Velocidad_triang/2/UB,Frecuencia_triang ,'^',fillstyle='none',markersize=10)
@@ -194,9 +188,35 @@ ax0b.plot(u_almenada,dx_almenada,'s',linestyle='none',fillstyle='none',markersiz
 ax1b.plot(u_lisa,freq_lisa,'o',linestyle='none',fillstyle='none',markersize=10,markeredgewidth=2)
 ax1b.plot(u_aserrada,freq_aserrada,'^',linestyle='none',fillstyle='none',markersize=10,markeredgewidth=2)
 ax1b.plot(u_almenada,freq_almenada,'s',linestyle='none',fillstyle='none',markersize=10,markeredgewidth=2)
-fig.savefig(dirw+'amplitudes_frecs_all_v2.pdf',dpi=300, bbox_inches='tight')
+#fig.savefig(dirw+'amplitudes_frecs_all_v2.pdf',dpi=300, bbox_inches='tight')
 #lin3, = ax0.plot(u_almenada_old/2/UB,dx_almenada_old/Lbandera/2,'s',linestyle='none',fillstyle='none',color=lin2.get_color())
 
 # fig1.savefig(dirw+'amplitudes_all_v2.pdf',dpi=300, bbox_inches='tight')
 #fig.savefig(dirw+'amplitudes_frecs_all_v2.pdf',dpi=300, bbox_inches='tight')
 
+data_all = ([u_lisa, dx_lisa, freq_lisa],[u_aserrada, dx_aserrada, freq_aserrada],[u_almenada, dx_almenada, freq_almenada])
+color_i = []
+for lin_i in [lin0,lin1,lin2]:
+    color_i.append(lin_i.get_color())
+
+
+for i in np.arange(len(f_offset)):
+
+    amp_i = np.sort(data_all[i][1])[-3:].mean()/Lbandera/2
+
+    amp_i0 = data_all[i][1][data_all[i][1]>0].min()/Lbandera/2
+    #amp_i0 = data_all[i][1][0]/Lbandera/2
+
+    u_offset = data_all[i][0].min()/2/UB
+
+    ax0.plot(u_onset[i]/2/UB,0,marker=mks[i],markersize=10,fillstyle='none',color=color_i[i] )
+    ax0.plot(u_offset,0,marker=mks[i],markersize=10,fillstyle='none',color=color_i[i],markeredgewidth=2 )
+    ax0.annotate("",xytext=(u_offset,0 ),xy=(u_offset ,amp_i0*.75), arrowprops=dict(arrowstyle="<-", lw=3.5, mutation_scale=20,shrinkA=5,color=color_i[i],ls='dashed'),color=color_i[i])
+    if i<2:
+            ax0.annotate("",xytext=(u_onset [i]/2/UB,0 ),xy=(u_onset[i]/2/UB ,amp_i*.9), arrowprops=dict(arrowstyle="->", lw=3.5, mutation_scale=20,shrinkA=5,color=color_i[i]),color=color_i[i],zorder=-1)
+    elif i==2:
+            ax0.annotate("",xytext=(u_onset [i]/2/UB,0 ),xy=(u_onset[i]/2/UB ,amp_i), arrowprops=dict(arrowstyle="->", lw=3.5, mutation_scale=20,shrinkA=5,color=color_i[i]),color=color_i[i],zorder=-1)
+
+
+
+fig.savefig(dirw+'amplitudes_frecs_all_v2.pdf',dpi=300, bbox_inches='tight')

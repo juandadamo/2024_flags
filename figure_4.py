@@ -86,7 +86,7 @@ delta_cl = 18e-3 # espesor de capa limite para velocidad 12m/s
 #longitud caracteristica de la placa plana (tunel) en base a la medicion en Balseiro
 x_carac = longitud_equivalente_capa_limite_turbulenta(delta_cl,Uinf,nu)
 U = 12
-delta_U12 = delta_turb(x_carac,U,nu)
+delta_U12 = delta_turb2(x_carac,U,nu)
 
 
 

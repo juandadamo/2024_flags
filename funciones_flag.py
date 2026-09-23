@@ -120,7 +120,7 @@ def veloc_tunel_ib(frec):
     return f_vel(frec)
         
    
-def delta_turb(x, U_inf, nu):
+def delta_turb2(x, U_inf, nu):
     Re_x = (U_inf * x) / nu
     delta = 0.37 * x * (Re_x)**(-0.2)
     return delta

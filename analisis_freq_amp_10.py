@@ -55,7 +55,7 @@ delta_cl = 18e-3 # espesor de capa limite para velocidad 12m/s
 #longitud caracteristica de la placa plana (tunel) en base a la medicion en Balseiro
 x_carac = longitud_equivalente_capa_limite_turbulenta(delta_cl,Uinf,nu)
 U = 12
-delta_U12 = delta_turb(x_carac,U,nu)
+delta_U12 = delta_turb2(x_carac,U,nu)
 
 
 
@@ -328,5 +328,5 @@ lin2, = ax1.plot(u_almenada/2/UB,dx_almenada/Lbandera/2,'s',linestyle='none')
 lin3, = ax1.plot(u_almenada_old/2/UB,dx_almenada_old/Lbandera/2,'s',linestyle='none',fillstyle='none',color=lin2.get_color())
 
 # fig1.savefig(dirw+'amplitudes_all_v2.pdf',dpi=300, bbox_inches='tight')
-fig.savefig(dirw+'amplitudes_frecs_all_v2.pdf',dpi=300, bbox_inches='tight')
+#fig.savefig(dirw+'amplitudes_frecs_all_v2.pdf',dpi=300, bbox_inches='tight')
 
