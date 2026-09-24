@@ -11,7 +11,8 @@ from skimage.restoration import unwrap_phase
 from skimage.transform import ProjectiveTransform, warp
 from skimage.transform import rotate
 from skimage.filters import threshold_otsu
-
+import matplotlib as mpl
+mpl.rcParams['path.simplify'] = True
 
 nfont = 16
 plt.rcParams.update({
@@ -42,6 +43,7 @@ def corregir_trapecio(img, src, dst):
     rot_img = rotate(img,1.14)
     tform = ProjectiveTransform()
     tform.estimate(src, dst)
+    # tform.from_estimate(src, dst)
     #print(warp(src,tform.inverse))
     return warp(rot_img, tform.inverse)
 
@@ -136,11 +138,15 @@ filas = {'$z_3$': 430, '$z_2$': 680, '$z_1$': 930}
 fig, ax = plt.subplots(1, 3, figsize=(14, 4.2),gridspec_kw={'width_ratios': [1, 1, 1.4]})
 
 # (a) imagen cruda deformada (ROI) con líneas
-ax[0].imshow(def_full.T, cmap='gray')
+ax[0].imshow(def_full.T, cmap='gray', rasterized=True)
 for nombre, f in filas.items():
     ax[0].axhline(f+cmin, color='tab:orange', lw=2.0,linestyle='dashed')
 ax[0].set_title('(a) FTP Image')
-ax[0].set_xlabel('col [px]'); ax[0].set_ylabel('row [px]')
+
+ax[0].set_yticks( np.array(list(filas.values())),
+                 labels=list(filas.keys()))
+ax[0].set_xlabel('col [px]');
+#ax[0].set_ylabel('row [px]')
 
 # (b) mapa h(x,z)
 
@@ -150,24 +156,27 @@ x_im = np.arange(h_tot.shape[0])*escala
 y_im = np.arange(h_tot.shape[1])*escala
 X, Y = np.meshgrid(x_im,y_im)
 px0 = 89
-im = ax[1].imshow(h_tot.T,extent=[-px0*escala, (h_tot.shape[0]-px0)*escala, 0, h_tot.shape[1]*escala],vmax=40)
+im = ax[1].imshow(h_tot.T,extent=[-px0*escala, (h_tot.shape[0]-px0)*escala, 0, h_tot.shape[1]*escala],vmax=40, rasterized=True)
 
 
     #X,Y,h_tot.T,levels=np.linspace(0,40,20))
-ax[1].plot(zerox*escala-px0*escala,1279*escala-zeroy*escala,'ks')
+ax[1].plot(zerox*escala-px0*escala,1279*escala-zeroy*escala,'ks',rasterized=True)
 #ax[0].plot(zerox,zeroy,'ws')
 #im = ax[1].plot(h_tot.T, cmap='Greys',  extent=[0, h_map.shape[0]*escala, 0, h_map.shape[1]*escala])
+
+
 for nombre, f in filas.items():
     ax[1].axhline(1279*escala-f*escala,  color='tab:orange', lw=2.0,linestyle='dashed')
 
 ax[1].set_title('(b) Deformation Map $h(x,z)$ [mm]')
-ax[1].set_xlabel('$x$ [mm]'); ax[1].set_ylabel('$z$ [mm]')
+ax[1].set_xlabel('$x$ [mm]'); #ax[1].set_ylabel('$z$ [mm]')
 ax[1].set_yticks(1279*escala-np.array(list(filas.values()))*escala,list(filas.keys()))
 plt.colorbar(im, ax=ax[1], label='$h$ [mm]')
 
 #perfiles y  mascara
 
 x_mm = np.arange(h_tot.shape[0]) * escala - 89*escala
+filas = {'$z_1$': 430, '$z_2$': 680, '$z_3$': 930}
 for nombre, f in filas.items():
     perfil = h_cur[:, 1280-f]              # ya es masked array
     indice_fin = np.nonzero(np.diff(perfil[-300:])<0)[0][0] + len(perfil)-300-5
@@ -179,7 +188,7 @@ ax[2].set_ylim([-40,40])
 ax[2].legend(fontsize=14); ax[2].grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig('figura_2f.png', dpi=200)
+plt.savefig('/home/juan/Documents/Publicaciones/2026_shear_flutter/figures/figure_2.pdf',dpi=300, bbox_inches='tight')
 plt.show()
 
 # --- guardar datos ---
